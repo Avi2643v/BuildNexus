@@ -1,34 +1,19 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #1d1d1f;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased selection:bg-blue-600 selection:text-white;
+  }
 }
 
-body {
-  color: #1d1d1f;
-  background-color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Apple typography scale utilities */
-.apple-headline {
-  letter-spacing: -0.015em;
-  font-weight: 600;
-}
-
-.apple-subhead {
-  color: #86868b;
-  letter-spacing: -0.01em;
-}
-
-/* Minimal translucent scrollbar */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -37,9 +22,50 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
+  background: #cbd5e1;
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.28);
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* Touch manipulation optimizations */
+button, input, select, a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Tactile button micro-physics (clean & glitch-free) */
+.btn-press:active,
+button:active:not(:disabled):not([data-no-press]) {
+  transform: scale(0.97);
+  transition: transform 80ms ease-out;
+}
+
+button:not(:active):not(:disabled):not([data-no-press]) {
+  transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 180ms ease,
+              background-color 160ms ease,
+              border-color 160ms ease;
+}
+
+/* Butter Ripple Animation */
+@keyframes butter-ripple-anim {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.4);
+    opacity: 0;
+  }
+}
+
+.butter-ripple-element {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: butter-ripple-anim 380ms cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  z-index: 25;
 }

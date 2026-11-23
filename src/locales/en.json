@@ -1,0 +1,34 @@
+{
+  "appName": "BuildNexus",
+  "tagline": "The Digital Era of Construction",
+  "heroTitle": "Build smarter. Pay fairly.",
+  "heroSubtitle": "The transparent digital marketplace connecting Builders, Workers, Suppliers & Logistics with guaranteed fair wages and live supplier-to-builder transit tracking.",
+  "nav": {
+    "home": "Home",
+    "market": "Marketplace",
+    "labour": "Labour Hire",
+    "chat": "Negotiate & Chat",
+    "notebook": "Digital Notebook",
+    "sell": "Sell Materials",
+    "delivery": "Track Delivery",
+    "ai": "AI Suite",
+    "admin": "BuildNexus Admin",
+    "about": "About Us",
+    "profile": "My Profile",
+    "logout": "Sign Out"
+  },
+  "roles": {
+    "CONTRACTOR": "Contractor / Builder",
+    "LABORER": "Laborer / Sardar",
+    "SUPPLIER": "Material Supplier",
+    "DELIVERY_AGENT": "Delivery Agent",
+    "ADMIN": "BuildNexus Admin"
+  },
+  "cta": {
+    "getStarted": "Get Started",
+    "bookLabor": "Hire Labour",
+    "buyMaterials": "Buy Materials",
+    "sellLeftover": "Sell Surplus",
+    "trackOrder": "Track Order"
+  }
+}
