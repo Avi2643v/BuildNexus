@@ -276,8 +276,9 @@ export const SYNC_SUPPLIERS: SyncSupplier[] = [
 /**
  * Stage 1: Environmental & Labour Efficiency Model (Physics + ISO 7243 WBGT Approximation)
  */
-export function computeWBGTEfficiency(weather: HourlyWeather, task: TaskNode, rainShockMm = 0): number {
-  const effectiveRain = weather.rainMm + rainShockMm;
+export function computeWBGTEfficiency(weather: HourlyWeather | undefined | null, task: TaskNode, rainShockMm = 0): number {
+  if (!weather) return 1.0;
+  const effectiveRain = (weather.rainMm ?? 0) + rainShockMm;
 
   // 1. Rain Sensitivity Hard Stop
   if (task.rainSensitive && effectiveRain > 4.0) {
@@ -288,11 +289,12 @@ export function computeWBGTEfficiency(weather: HourlyWeather, task: TaskNode, ra
   // Simplified outdoor WBGT estimate: 0.7*Tw + 0.2*Tg + 0.1*Ta
   let effPhys = 1.0;
   if (task.isOutdoor) {
-    if (weather.wbgtC > 32.0) {
+    const wbgt = weather.wbgtC ?? 26.0;
+    if (wbgt > 32.0) {
       effPhys = 0.55; // Extreme heat stress — mandatory rest cycles
-    } else if (weather.wbgtC > 28.0) {
+    } else if (wbgt > 28.0) {
       effPhys = 0.80; // Moderate thermal strain
-    } else if (weather.wbgtC < 10.0) {
+    } else if (wbgt < 10.0) {
       effPhys = 0.85; // Extreme cold stiffness
     }
   }
@@ -300,6 +302,27 @@ export function computeWBGTEfficiency(weather: HourlyWeather, task: TaskNode, ra
   // 3. TabPFN residual surrogate adjustment (simulated in-context learning offset based on squad historical logs)
   const residualOffset = task.heatLoad === 'HIGH' ? -0.05 : 0.04;
   return Math.min(1.15, Math.max(0.0, effPhys + residualOffset));
+}
+
+export function getFallbackWeatherData(): HourlyWeather[] {
+  return Array.from({ length: 384 }, (_, i) => {
+    const day = Math.floor(i / 24);
+    const hourOfDay = i % 24;
+    const isRainyDay = day >= 3 && day <= 5; // Rain spell on Days 4-5
+    const temp = 26 + 7 * Math.sin(((hourOfDay - 6) / 24) * 2 * Math.PI);
+    const rain = isRainyDay && hourOfDay >= 11 && hourOfDay <= 16 ? 12.5 : 0;
+    const rh = isRainyDay ? 88 : 65;
+    const wbgt = temp * 0.75 + (rh / 100) * 8;
+    return {
+      hour: i,
+      tempC: Number(temp.toFixed(1)),
+      humidityPct: rh,
+      rainMm: rain,
+      windKmh: 12,
+      solarWm2: hourOfDay >= 6 && hourOfDay <= 18 ? 500 : 0,
+      wbgtC: Number(wbgt.toFixed(1)),
+    };
+  });
 }
 
 /**
@@ -317,6 +340,8 @@ export async function fetchLiveWeather16d(lat = 22.58, lon = 88.42): Promise<Hou
     const hums = data.hourly?.relative_humidity_2m || [];
     const rains = data.hourly?.rain || [];
     const winds = data.hourly?.wind_speed_10m || [];
+
+    if (!times.length) return getFallbackWeatherData();
 
     return times.slice(0, 384).map((_: string, i: number) => {
       const t = temps[i] ?? 28;
@@ -340,25 +365,7 @@ export async function fetchLiveWeather16d(lat = 22.58, lon = 88.42): Promise<Hou
       };
     });
   } catch (err) {
-    // Deterministic fallback representing typical tropical monsoon/summer construction cycle
-    return Array.from({ length: 384 }, (_, i) => {
-      const day = Math.floor(i / 24);
-      const hourOfDay = i % 24;
-      const isRainyDay = day >= 3 && day <= 5; // Rain spell on Days 4-5
-      const temp = 26 + 7 * Math.sin((hourOfDay - 6) / 24 * 2 * Math.PI);
-      const rain = isRainyDay && hourOfDay >= 11 && hourOfDay <= 16 ? 12.5 : 0;
-      const rh = isRainyDay ? 88 : 65;
-      const wbgt = temp * 0.75 + (rh / 100) * 8;
-      return {
-        hour: i,
-        tempC: Number(temp.toFixed(1)),
-        humidityPct: rh,
-        rainMm: rain,
-        windKmh: 12,
-        solarWm2: hourOfDay >= 6 && hourOfDay <= 18 ? 500 : 0,
-        wbgtC: Number(wbgt.toFixed(1)),
-      };
-    });
+    return getFallbackWeatherData();
   }
 }
 
@@ -370,7 +377,7 @@ export function evaluatePlanRollout(
   tasks: TaskNode[],
   squadAssignments: Record<string, string>,
   supplierAssignments: Record<string, string>,
-  weatherData: HourlyWeather[],
+  weatherData?: HourlyWeather[],
   shocks = { rainMm: 0, supplierDelayDays: 0, absenteeismPct: 0 },
   numRollouts = 300
 ): {
@@ -383,6 +390,9 @@ export function evaluatePlanRollout(
   directLaborCost: number;
   taskTimeline: CandidatePlan['schedule'];
 } {
+  const safeWeather = (weatherData && weatherData.length > 0) ? weatherData : getFallbackWeatherData();
+  const defaultWeather = safeWeather[0];
+
   const rolloutCosts: number[] = [];
   const rolloutMakespans: number[] = [];
   const rolloutIdleCosts: number[] = [];
@@ -396,8 +406,8 @@ export function evaluatePlanRollout(
     const supplier = SYNC_SUPPLIERS.find((s) => s.id === supplierAssignments[task.id]) || SYNC_SUPPLIERS[0];
 
     // Compute weather penalty over the task execution window
-    const startHour = Math.min(383, Math.floor(deterministicCurrentDay * 24));
-    const weatherSlice = weatherData.slice(startHour, startHour + Math.ceil(task.baseDurationDays * 24));
+    const startHour = Math.min(383, Math.max(0, Math.floor(deterministicCurrentDay * 24)));
+    const weatherSlice = safeWeather.slice(startHour, startHour + Math.ceil(task.baseDurationDays * 24));
     const avgEff = weatherSlice.length > 0
       ? weatherSlice.reduce((acc, w) => acc + computeWBGTEfficiency(w, task, shocks.rainMm), 0) / weatherSlice.length
       : 1.0;
@@ -436,15 +446,12 @@ export function evaluatePlanRollout(
       const supplier = SYNC_SUPPLIERS.find((s) => s.id === supplierAssignments[task.id]) || SYNC_SUPPLIERS[0];
 
       // Stochastic Material Delivery (LogNormal distribution)
-      // mu and sigma
-      const z = (Math.random() + Math.random() + Math.random() + Math.random() - 2) * 1.732; // Standard normal approx
+      const z = (Math.random() + Math.random() + Math.random() + Math.random() - 2) * 1.732;
       const leadTimeSample = Math.exp(Math.log(supplier.meanLeadTimeDays + 0.1) + supplier.leadTimeSigma * z) + shocks.supplierDelayDays;
       const scheduledArrivalDay = currentDay;
       const actualArrivalDay = scheduledArrivalDay + Math.max(0, leadTimeSample);
 
       // COUPLED IDLE-MISMATCH RULE:
-      // If squad arrives at currentDay, but material arrives at actualArrivalDay > currentDay,
-      // the squad is on site, cannot start, and contractor incurs idle wages!
       const idleMismatchDays = Math.max(0, actualArrivalDay - scheduledArrivalDay);
       const idleCost = idleMismatchDays * squad.dailyWagePerWorker * squad.squadSize;
       kIdleLaborCost += idleCost;
@@ -460,8 +467,8 @@ export function evaluatePlanRollout(
       kTransportCost += transportCost;
 
       // Weather impact on task completion duration
-      const startHour = Math.min(383, Math.floor((currentDay + idleMismatchDays) * 24));
-      const weatherAtWindow = weatherData[startHour] || weatherData[0];
+      const startHour = Math.min(383, Math.max(0, Math.floor((currentDay + idleMismatchDays) * 24)));
+      const weatherAtWindow = safeWeather[startHour] || defaultWeather;
       const eff = computeWBGTEfficiency(weatherAtWindow, task, shocks.rainMm);
       const effectiveEff = Math.max(0.2, eff * squad.baseProductivity * (1 - shocks.absenteeismPct));
       const durationSample = Math.ceil(task.baseDurationDays / effectiveEff);
@@ -508,9 +515,10 @@ export function evaluatePlanRollout(
  */
 export function generateParetoFrontier(
   tasks = DEFAULT_SITE_DAG,
-  weatherData: HourlyWeather[],
+  weatherData?: HourlyWeather[],
   shocks = { rainMm: 0, supplierDelayDays: 0, absenteeismPct: 0 }
 ): CandidatePlan[] {
+  const safeWeather = (weatherData && weatherData.length > 0) ? weatherData : getFallbackWeatherData();
   // Strategy 1: Budget Priority (Lowest Cost) — selects economical suppliers and standard crews
   const budgetSquads: Record<string, string> = {
     t1: 'sq-5', // Ganga Earthworks
@@ -558,9 +566,9 @@ export function generateParetoFrontier(
     t5: 'sup-2', // Express RMC only for critical column casting
   };
 
-  const evalBudget = evaluatePlanRollout(tasks, budgetSquads, budgetSuppliers, weatherData, shocks);
-  const evalSafe = evaluatePlanRollout(tasks, safeSquads, safeSuppliers, weatherData, shocks);
-  const evalBalanced = evaluatePlanRollout(tasks, balancedSquads, balancedSuppliers, weatherData, shocks);
+  const evalBudget = evaluatePlanRollout(tasks, budgetSquads, budgetSuppliers, safeWeather, shocks);
+  const evalSafe = evaluatePlanRollout(tasks, safeSquads, safeSuppliers, safeWeather, shocks);
+  const evalBalanced = evaluatePlanRollout(tasks, balancedSquads, balancedSuppliers, safeWeather, shocks);
 
   // Generate intermediate non-dominated trade-off points
   const plans: CandidatePlan[] = [];

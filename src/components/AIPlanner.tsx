@@ -5,6 +5,7 @@ import {
   generateParetoFrontier,
   CandidatePlan,
   fetchLiveWeather16d,
+  getFallbackWeatherData,
   HourlyWeather,
   DEFAULT_SITE_DAG,
 } from '@/lib/syncEngine';
@@ -29,8 +30,8 @@ interface AIPlannerProps {
 }
 
 export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPlanId }) => {
-  const [weatherData, setWeatherData] = useState<HourlyWeather[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [weatherData, setWeatherData] = useState<HourlyWeather[]>(getFallbackWeatherData());
+  const [loading, setLoading] = useState(false);
 
   // Live Shock Sliders
   const [rainShock, setRainShock] = useState<number>(0); // 0..50 mm/hr

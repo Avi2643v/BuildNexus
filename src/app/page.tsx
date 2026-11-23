@@ -89,41 +89,49 @@ export default function LandingPage() {
 
       {/* 4. Core Spec Pillars (Apple Numbers Grid) */}
       <section className="max-w-5xl w-full mx-auto px-4 py-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left">
-            <div className="text-3xl sm:text-4xl font-semibold text-[#1d1d1f]">
-              100%
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 items-stretch">
+          <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left flex flex-col h-full">
+            <div className="h-11 flex items-center justify-center sm:justify-start">
+              <span className="text-3xl sm:text-4xl font-semibold text-[#1d1d1f] tracking-tight leading-none">
+                100%
+              </span>
             </div>
-            <div className="text-xs font-medium text-[#86868b] mt-1.5 leading-snug">
+            <p className="text-xs font-medium text-[#86868b] mt-3 leading-snug">
               Fair Wage Guarantee. Zero broker cuts on worker earnings.
-            </div>
+            </p>
           </div>
 
-          <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left">
-            <div className="text-3xl sm:text-4xl font-semibold text-[#0071e3]">
-              SyncEngine
+          <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left flex flex-col h-full">
+            <div className="h-11 flex items-center justify-center sm:justify-start">
+              <span className="text-2xl sm:text-[32px] font-semibold text-[#0071e3] tracking-tight leading-none whitespace-nowrap">
+                SyncEngine
+              </span>
             </div>
-            <div className="text-xs font-medium text-[#86868b] mt-1.5 leading-snug">
+            <p className="text-xs font-medium text-[#86868b] mt-3 leading-snug">
               Stochastic Pareto Scheduler with coupled idle-mismatch tracking.
-            </div>
+            </p>
           </div>
 
-          <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left">
-            <div className="text-3xl sm:text-4xl font-semibold text-[#1d1d1f]">
-              90 min
+          <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left flex flex-col h-full">
+            <div className="h-11 flex items-center justify-center sm:justify-start">
+              <span className="text-3xl sm:text-4xl font-semibold text-[#1d1d1f] tracking-tight leading-none">
+                90 min
+              </span>
             </div>
-            <div className="text-xs font-medium text-[#86868b] mt-1.5 leading-snug">
+            <p className="text-xs font-medium text-[#86868b] mt-3 leading-snug">
               Ready-Mix Concrete perishability horizon monitored live.
-            </div>
+            </p>
           </div>
 
-          <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left">
-            <div className="text-3xl sm:text-4xl font-semibold text-[#1b8738]">
-              14.8%
+          <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left flex flex-col h-full">
+            <div className="h-11 flex items-center justify-center sm:justify-start">
+              <span className="text-3xl sm:text-4xl font-semibold text-[#1b8738] tracking-tight leading-none">
+                14.8%
+              </span>
             </div>
-            <div className="text-xs font-medium text-[#86868b] mt-1.5 leading-snug">
+            <p className="text-xs font-medium text-[#86868b] mt-3 leading-snug">
               Average procurement savings over regional street broker rates.
-            </div>
+            </p>
           </div>
         </div>
       </section>

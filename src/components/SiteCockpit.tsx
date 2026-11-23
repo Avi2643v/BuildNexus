@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { fetchLiveWeather16d, HourlyWeather } from '@/lib/syncEngine';
+import { fetchLiveWeather16d, getFallbackWeatherData, HourlyWeather } from '@/lib/syncEngine';
 import { formatINR } from '@/lib/utils';
 import {
   CloudRain,
@@ -24,8 +24,8 @@ interface SiteCockpitProps {
 }
 
 export const SiteCockpit: React.FC<SiteCockpitProps> = ({ onNavigateTab, committedPlanName }) => {
-  const [weatherData, setWeatherData] = useState<HourlyWeather[]>([]);
-  const [loadingWeather, setLoadingWeather] = useState(true);
+  const [weatherData, setWeatherData] = useState<HourlyWeather[]>(getFallbackWeatherData());
+  const [loadingWeather, setLoadingWeather] = useState(false);
 
   useEffect(() => {
     fetchLiveWeather16d(22.58, 88.42).then((data) => {
