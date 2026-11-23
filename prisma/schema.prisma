@@ -8,67 +8,261 @@ generator client {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  name         String
-  mobile       String    @unique
-  role         String    // CONTRACTOR, LABORER, SUPPLIER, DELIVERY_AGENT, ADMIN
-  maskedGovtId String?
-  isVerified   Boolean   @default(true)
-  status       String    @default("APPROVED")
-  rating       Float     @default(4.8)
-  createdAt    DateTime  @default(now())
+  id             String        @id @default(uuid())
+  name           String
+  mobile         String        @unique
+  role           String        // CONTRACTOR, LABORER, SUPPLIER, DELIVERY_AGENT, ADMIN
+  govtIdType     String?       // AADHAAR, PAN, VOTER_ID
+  maskedGovtId   String?       // e.g., XXXX XXXX 1234
+  isVerified     Boolean       @default(false)
+  status         String        @default("APPROVED") // PENDING, APPROVED, REJECTED
+  avatar         String?
+  city           String        @default("Bengaluru")
+  bio            String?
+  rating         Float         @default(4.8)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  laborProfile   LaborProfile?
+  materials      Material[]    @relation("SupplierMaterials")
+  contractorOrders Order[]     @relation("ContractorOrders")
+  cartItems      CartItem[]
+  bookings       Booking[]     @relation("ContractorBookings")
+  notebooks      NotebookEntry[]
+  deliveries     Delivery[]    @relation("AgentDeliveries")
+  casesRaised    Case[]        @relation("CasesRaised")
+  notifications  Notification[]
+}
+
+model LaborProfile {
+  id                String              @id @default(uuid())
+  userId            String              @unique
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isSardar          Boolean             @default(false)
+  teamName          String?
+  teamSize          Int                 @default(1)
+  wageSplitDetails  String?             // JSON string for transparency breakdown
+  fairWageGuarantee Boolean             @default(true)
+  dailyWage         Float               @default(650)
+  experienceYears   Int                 @default(3)
+  skills            LaborSkill[]
+  availability      LaborAvailability[]
+  bookings          Booking[]
+}
+
+model LaborSkill {
+  id             String       @id @default(uuid())
+  laborProfileId String
+  laborProfile   LaborProfile @relation(fields: [laborProfileId], references: [id], onDelete: Cascade)
+  name           String       // Brick Jointer, Brick Breaker, Masala Mixer, Material Coolie, Mason, etc.
+}
+
+model LaborAvailability {
+  id             String       @id @default(uuid())
+  laborProfileId String
+  laborProfile   LaborProfile @relation(fields: [laborProfileId], references: [id], onDelete: Cascade)
+  date           String       // YYYY-MM-DD
+  status         String       @default("AVAILABLE") // AVAILABLE, PARTIAL, BOOKED, UNAVAILABLE
+  slotsAvailable Int          @default(5)
+  totalSlots     Int          @default(5)
 }
 
 model Material {
-  id           String    @id @default(uuid())
-  name         String
-  category     String    // Cement, Steel, Bricks, Sand
-  unit         String
-  basePrice    Float
-  marketAvg    Float
-  stock        Int
-  rating       Float     @default(4.8)
-  supplierName String
-  createdAt    DateTime  @default(now())
+  id                   String      @id @default(uuid())
+  name                 String
+  category             String      // cement, bricks, sand, steel, aggregates, tiles, paint, plumbing, electrical
+  price                Float
+  unit                 String      // bag, 1000 pcs, ton, sq.ft, liter, etc.
+  stock                Int         @default(100)
+  rating               Float       @default(4.7)
+  supplierId           String
+  supplier             User        @relation("SupplierMaterials", fields: [supplierId], references: [id])
+  isVerifiedSupplier   Boolean     @default(true)
+  deliveryEtaDays      Int         @default(1)
+  image                String
+  brand                String
+  city                 String      @default("Bengaluru")
+  isContractorListing  Boolean     @default(false)
+  condition            String?     // NEW, SURPLUS, USED
+  status               String      @default("APPROVED") // PENDING, APPROVED, REJECTED
+  isBoosted            Boolean     @default(false)
+  createdAt            DateTime    @default(now())
+
+  cartItems            CartItem[]
+  orderItems           OrderItem[]
+  offers               Offer[]
 }
 
-model LaborSquad {
-  id                 String    @id @default(uuid())
-  trade              String
-  leadName           String
-  squadSize          Int
-  dailyRatePerWorker Float
-  sardarCut          Float     @default(50.0)
-  platformFee        Float     @default(0.0)
-  verifiedSkillScore Float     @default(0.92)
-  rating             Float     @default(4.8)
-  location           String
-  createdAt          DateTime  @default(now())
+model CartItem {
+  id              String    @id @default(uuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  materialId      String
+  material        Material  @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  quantity        Int       @default(1)
+  negotiatedPrice Float?
 }
 
-model KhataRecord {
+model Order {
+  id                  String      @id @default(uuid())
+  contractorId        String
+  contractor          User        @relation("ContractorOrders", fields: [contractorId], references: [id])
+  subtotal            Float
+  gstAmount           Float
+  deliveryFee         Float
+  stagingFee          Float
+  discountAmount      Float       @default(0)
+  totalAmount         Float
+  status              String      @default("PLACED") // PLACED, PACKED, AT_WAREHOUSE, IN_TRANSIT, DELIVERED, CANCELLED
+  deliveryAddress     String
+  deliveryDate        String
+  deliveryTimeSlot    String
+  createdAt           DateTime    @default(now())
+
+  items               OrderItem[]
+  delivery            Delivery?
+  cases               Case[]
+}
+
+model OrderItem {
+  id              String   @id @default(uuid())
+  orderId         String
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  materialId      String
+  material        Material @relation(fields: [materialId], references: [id])
+  supplierId      String
+  quantity        Int
+  unitPrice       Float
+  isNegotiated    Boolean  @default(false)
+}
+
+model Conversation {
   id             String    @id @default(uuid())
-  date           String
-  category       String    // LABOR, MATERIAL, PETTY_CASH
-  title          String
-  entity         String
-  promisedAmount Float
-  paidAmount     Float
-  status         String    @default("SETTLED")
-  note           String?
-  createdAt      DateTime  @default(now())
+  participant1Id String
+  participant2Id String
+  lastMessageAt  DateTime  @default(now())
+  flagged        Boolean   @default(false)
+  flagReason     String?
+
+  messages       Message[]
+  offers         Offer[]
 }
 
-model DeliveryTracking {
-  id                  String    @id @default(uuid())
-  orderNumber         String    @unique
-  material            String
-  quantity            String
-  driverName          String
-  truckNumber         String
-  otpCode             String
-  status              String    @default("IN_TRANSIT")
-  batchAgeMinutes     Int       @default(40)
-  maxShelfLifeMinutes Int       @default(90)
-  createdAt           DateTime  @default(now())
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  text           String
+  imageUrl       String?
+  isSystem       Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+}
+
+model Offer {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  materialId     String
+  material       Material     @relation(fields: [materialId], references: [id])
+  price          Float
+  quantity       Int
+  status         String       @default("SENT") // SENT, COUNTERED, APPROVED_PARTY, VERIFIED_BUILDNEXUS, REJECTED
+  counterPrice   Float?
+  counterQty     Int?
+  createdAt      DateTime     @default(now())
+}
+
+model Booking {
+  id              String       @id @default(uuid())
+  contractorId    String
+  contractor      User         @relation("ContractorBookings", fields: [contractorId], references: [id])
+  laborProfileId  String
+  laborProfile    LaborProfile @relation(fields: [laborProfileId], references: [id])
+  laborType       String
+  workersCount    Int          @default(1)
+  startDate       String       // YYYY-MM-DD
+  endDate         String       // YYYY-MM-DD
+  dailyWage       Float
+  durationDays    Int
+  totalCost       Float
+  platformCommission Float     @default(0)
+  status          String       @default("REQUESTED") // REQUESTED, ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED
+  createdAt       DateTime     @default(now())
+}
+
+model NotebookEntry {
+  id           String   @id @default(uuid())
+  contractorId String
+  contractor   User     @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  projectId    String   @default("proj-1")
+  projectName  String   @default("Main Site - Villa Project")
+  date         String   // YYYY-MM-DD
+  type         String   // ATTENDANCE, MATERIAL, EXPENSE, PAYMENT
+  title        String
+  amount       Float    @default(0)
+  workerName   String?
+  wagePromised Float?
+  wagePaid     Float?
+  notes        String?
+  photoUrl     String?
+  syncStatus   String   @default("SYNCED") // LOCAL, SYNCED
+  createdAt    DateTime @default(now())
+}
+
+model Delivery {
+  id               String   @id @default(uuid())
+  orderId          String   @unique
+  order            Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  agentId          String?
+  agent            User?    @relation("AgentDeliveries", fields: [agentId], references: [id])
+  status           String   @default("ASSIGNED") // ASSIGNED, PICKED_UP, IN_TRANSIT, DELIVERED
+  otpCode          String   @default("4921")
+  itemMatches      Boolean  @default(false)
+  quantityVerified Boolean  @default(false)
+  conditionPhotos  String?
+  signature        String?
+  deliveryNotes    String?
+  currentLat       Float    @default(12.9716)
+  currentLng       Float    @default(77.5946)
+  updatedAt        DateTime @updatedAt
+
+  cases            Case[]
+}
+
+model Case {
+  id              String    @id @default(uuid())
+  orderId         String
+  order           Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  deliveryId      String?
+  delivery        Delivery? @relation(fields: [deliveryId], references: [id])
+  raisedById      String
+  raisedBy        User      @relation("CasesRaised", fields: [raisedById], references: [id])
+  type            String    // DAMAGED, SHORT_QUANTITY, WRONG_ITEM
+  description     String
+  photos          String?
+  status          String    @default("OPEN") // OPEN, UNDER_REVIEW, RESOLVED
+  resolutionNotes String?
+  createdAt       DateTime  @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  link      String?
+  type      String   @default("INFO") // INFO, OFFER, ORDER, BOOKING, ALERT
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model LaborType {
+  id          String   @id @default(uuid())
+  name        String   // Brick Jointer, Brick Breaker, Masala Mixer, Material Coolie, etc.
+  description String
+  defaultWage Float
+  icon        String
 }
