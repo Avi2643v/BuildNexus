@@ -146,7 +146,7 @@ const initialCommodities: CommodityTrend[] = [
   },
 ];
 
-export default function AISuitePage() {
+function AISuitePageContent() {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get('tab') || 'forecast';
 
@@ -1256,5 +1256,13 @@ export default function AISuitePage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AISuitePage() {
+  return (
+    <React.Suspense fallback={<div className="p-8 text-center text-sm text-slate-500">Loading AI Intelligence Suite...</div>}>
+      <AISuitePageContent />
+    </React.Suspense>
   );
 }

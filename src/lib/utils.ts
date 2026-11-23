@@ -47,6 +47,15 @@ export function maskGovtId(idNumber: string): string {
   return 'XXXX XXXX 1234';
 }
 
+export function maskPhoneNumber(phone: string): string {
+  if (!phone) return phone;
+  const clean = phone.replace(/\D/g, '');
+  if (clean.length >= 10) {
+    return `${clean.slice(0, 2)}••••••${clean.slice(-2)}`;
+  }
+  return maskSensitiveText(phone);
+}
+
 export function formatDate(dateString: string): string {
   try {
     const d = new Date(dateString);
