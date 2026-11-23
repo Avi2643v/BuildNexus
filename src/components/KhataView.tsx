@@ -4,205 +4,159 @@ import React, { useState } from 'react';
 import { MOCK_KHATA, KhataEntry } from '@/lib/mockData';
 import { formatINR } from '@/lib/utils';
 import {
-  BookOpen,
   Mic,
-  Plus,
-  CheckCircle2,
-  FileSpreadsheet,
   FileText,
-  Clock,
+  CheckCircle2,
   ShieldCheck,
-  Building,
+  CreditCard,
+  ArrowUpRight,
 } from 'lucide-react';
 
 export const KhataView: React.FC = () => {
   const [entries, setEntries] = useState<KhataEntry[]>(MOCK_KHATA);
   const [isListening, setIsListening] = useState(false);
   const [voiceNotice, setVoiceNotice] = useState<string | null>(null);
-  const [newTitle, setNewTitle] = useState('');
-  const [newAmount, setNewAmount] = useState<number>(0);
-  const [newEntity, setNewEntity] = useState('');
 
   const totalPaid = entries.reduce((acc, curr) => acc + curr.paidAmount, 0);
   const totalPromised = entries.reduce((acc, curr) => acc + curr.promisedAmount, 0);
 
   const handleVoiceInput = () => {
     setIsListening(true);
-    setVoiceNotice('Listening to speech... "Paid 4000 rupees to Bihari Bhai for column shuttering"');
+    setVoiceNotice('Listening to dictation: "Paid 4000 rupees to Bihari Bhai for column shuttering"');
     setTimeout(() => {
       setIsListening(false);
       const simulatedEntry: KhataEntry = {
         id: `k-${Date.now()}`,
-        date: 'Just now (Voice Input)',
+        date: 'Today, 11:20 AM',
         category: 'LABOR',
         title: 'Column Shuttering Advance',
         entity: 'Bihari Bhai Concreting Squad',
         promisedAmount: 4000,
         paidAmount: 4000,
         status: 'SETTLED',
-        note: 'Transcribed via BuildNexus Speech Engine. 0% deductions.',
+        note: 'Dictated via Speech Engine. 0% deductions.',
       };
       setEntries((prev) => [simulatedEntry, ...prev]);
-      setVoiceNotice('Transcribed & recorded to Digital Khata!');
+      setVoiceNotice('Transcribed and added to ledger.');
       setTimeout(() => setVoiceNotice(null), 3000);
     }, 2500);
   };
 
-  const handleManualAdd = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTitle || newAmount <= 0) return;
-    const entry: KhataEntry = {
-      id: `k-${Date.now()}`,
-      date: 'Just now',
-      category: 'PETTY_CASH',
-      title: newTitle,
-      entity: newEntity || 'Site 4B Petty Expense',
-      promisedAmount: newAmount,
-      paidAmount: newAmount,
-      status: 'SETTLED',
-      note: 'Manual notebook entry.',
-    };
-    setEntries((prev) => [entry, ...prev]);
-    setNewTitle('');
-    setNewAmount(0);
-    setNewEntity('');
-  };
-
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-10">
+      {/* Title */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 font-['Space_Grotesk']">
-              Contractor Digital Khata & Ledger
-            </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-              Audit-Ready
-            </span>
-          </div>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1">
-            Real-time tracking of promised vs. paid wages with zero leakage. Hands-free voice logging for on-site supervisors.
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1d1d1f]">
+            Digital Khata.
+          </h2>
+          <p className="text-lg text-[#86868b] font-normal mt-1">
+            Site accounting with Apple Wallet simplicity. Audit-ready wage disbursements.
           </p>
         </div>
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={handleVoiceInput}
-            className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition ${
+            className={`px-4 py-2 rounded-full text-xs font-medium flex items-center gap-2 transition ${
               isListening
-                ? 'bg-rose-600 text-white animate-pulse'
-                : 'bg-slate-900 text-amber-400 hover:bg-slate-800 border border-slate-700'
+                ? 'bg-[#b64400] text-white animate-pulse'
+                : 'bg-[#f5f5f7] hover:bg-[#e8e8ed] text-[#1d1d1f]'
             }`}
           >
-            <Mic className="w-4 h-4" />
-            <span>{isListening ? 'Recording Audio...' : 'Voice-to-Khata'}</span>
+            <Mic className="w-3.5 h-3.5" />
+            <span>{isListening ? 'Listening...' : 'Voice Dictate'}</span>
           </button>
 
           <button
-            onClick={() => alert('Exporting Official BuildNexus Ledger PDF & Excel summary...')}
-            className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm flex items-center gap-1.5 transition"
+            onClick={() => alert('Exporting Official BuildNexus Ledger PDF...')}
+            className="bg-[#0071e3] hover:bg-[#0077ed] text-white px-4 py-2 rounded-full text-xs font-medium transition shadow-sm"
           >
-            <FileText className="w-4 h-4" />
-            <span>Export PDF</span>
+            Export Ledger
           </button>
         </div>
       </div>
 
       {voiceNotice && (
-        <div className="bg-blue-50 border border-blue-300 text-blue-900 px-4 py-2.5 rounded-lg text-xs font-bold flex items-center gap-2 animate-fade-in">
-          <CheckCircle2 className="w-4 h-4 text-blue-600" />
+        <div className="bg-[#f5f5f7] border border-[#d2d2d7] text-[#1d1d1f] px-5 py-3 rounded-2xl text-xs font-medium flex items-center gap-2 shadow-sm animate-fade-in">
+          <CheckCircle2 className="w-4 h-4 text-[#1b8738]" />
           <span>{voiceNotice}</span>
         </div>
       )}
 
-      {/* Financial Summary Strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Total Promised</span>
-          <div className="text-2xl font-black text-slate-900 font-['Space_Grotesk'] mt-1">
+      {/* Apple Card Style Summary Numbers */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="rounded-[24px] bg-[#f5f5f7] p-6">
+          <span className="text-xs font-semibold text-[#86868b] uppercase tracking-wider block">
+            Total Promised
+          </span>
+          <div className="text-3xl font-semibold tracking-tight text-[#1d1d1f] mt-1">
             {formatINR(totalPromised)}
           </div>
-          <span className="text-[11px] text-slate-500">Agreed contract milestones</span>
+          <span className="text-xs text-[#86868b] mt-1 block">Contract milestones locked</span>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Total Paid Out</span>
-          <div className="text-2xl font-black text-emerald-600 font-['Space_Grotesk'] mt-1">
+        <div className="rounded-[24px] bg-[#f5f5f7] p-6">
+          <span className="text-xs font-semibold text-[#1b8738] uppercase tracking-wider block">
+            Total Disbursed
+          </span>
+          <div className="text-3xl font-semibold tracking-tight text-[#1b8738] mt-1">
             {formatINR(totalPaid)}
           </div>
-          <span className="text-[11px] text-emerald-700 font-semibold">100% Settled • 0% Disputed</span>
+          <span className="text-xs text-[#86868b] mt-1 block">100% Settled with zero dispute</span>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Wage Integrity Index</span>
-          <div className="text-2xl font-black text-blue-600 font-['Space_Grotesk'] mt-1">
+        <div className="rounded-[24px] bg-[#f5f5f7] p-6">
+          <span className="text-xs font-semibold text-[#0071e3] uppercase tracking-wider block">
+            Wage Integrity
+          </span>
+          <div className="text-3xl font-semibold tracking-tight text-[#0071e3] mt-1">
             100% Fair
           </div>
-          <span className="text-[11px] text-blue-700 font-semibold">Zero unauthorized contractor cuts</span>
+          <span className="text-xs text-[#86868b] mt-1 block">Zero unauthorized cuts</span>
         </div>
       </div>
 
-      {/* Main Ledger Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-slate-200 flex items-center justify-between">
-          <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-800 font-['Space_Grotesk']">
-            Site Disbursement Log
-          </h2>
-          <span className="text-xs text-slate-500 font-medium">Auto-synced with GST & UPI Rails</span>
+      {/* Apple Wallet Style Transaction List */}
+      <div className="rounded-[28px] bg-[#f5f5f7] p-6 sm:p-8">
+        <div className="flex items-center justify-between pb-4 border-b border-[#d2d2d7]/50 mb-2">
+          <h3 className="text-sm font-semibold text-[#1d1d1f] uppercase tracking-wider">
+            Recent Activity
+          </h3>
+          <span className="text-xs text-[#86868b]">UPI & NEFT Synchronized</span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase font-bold text-[10px] tracking-wider">
-              <tr>
-                <th className="py-3 px-4">Date & Time</th>
-                <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4">Particulars</th>
-                <th className="py-3 px-4">Entity</th>
-                <th className="py-3 px-4 text-right">Promised</th>
-                <th className="py-3 px-4 text-right">Settled</th>
-                <th className="py-3 px-4 text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {entries.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50/80 transition">
-                  <td className="py-3 px-4 text-slate-500 whitespace-nowrap">{item.date}</td>
-                  <td className="py-3 px-4">
-                    <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        item.category === 'LABOR'
-                          ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                          : item.category === 'MATERIAL'
-                          ? 'bg-blue-100 text-blue-900 border border-blue-200'
-                          : 'bg-slate-100 text-slate-800 border border-slate-200'
-                      }`}
-                    >
-                      {item.category}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 font-bold text-slate-900">
+        <div className="divide-y divide-[#d2d2d7]/40">
+          {entries.map((item) => (
+            <div
+              key={item.id}
+              className="py-4 flex items-center justify-between gap-4 hover:bg-black/[0.01] transition px-2 rounded-xl"
+            >
+              <div className="flex items-center gap-3.5">
+                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#1d1d1f] shadow-sm border border-[#d2d2d7]/40">
+                  <CreditCard className="w-4 h-4 text-[#86868b]" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-[#1d1d1f]">
                     {item.title}
-                    <div className="text-[10px] text-slate-500 font-normal">{item.note}</div>
-                  </td>
-                  <td className="py-3 px-4 text-slate-700">{item.entity}</td>
-                  <td className="py-3 px-4 text-right font-medium text-slate-500">
-                    {formatINR(item.promisedAmount)}
-                  </td>
-                  <td className="py-3 px-4 text-right font-black text-slate-900">
-                    {formatINR(item.paidAmount)}
-                  </td>
-                  <td className="py-3 px-4 text-center">
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                      <ShieldCheck className="w-3 h-3" /> Settled
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                  <div className="text-xs text-[#86868b]">
+                    {item.entity} • {item.date}
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <div className="text-sm font-semibold text-[#1d1d1f]">
+                  -{formatINR(item.paidAmount)}
+                </div>
+                <div className="text-[11px] font-medium text-[#1b8738] flex items-center justify-end gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  <span>Settled</span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

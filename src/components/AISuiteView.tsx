@@ -3,17 +3,16 @@
 import React, { useState } from 'react';
 import { formatINR } from '@/lib/utils';
 import {
-  Brain,
   Sparkles,
-  Cpu,
+  GitBranch,
   Video,
   TrendingUp,
-  Activity,
-  CheckCircle2,
+  Brain,
   Send,
-  GitBranch,
+  CheckCircle2,
+  Activity,
   ShieldCheck,
-  Zap,
+  ChevronRight,
 } from 'lucide-react';
 
 export const AISuiteView: React.FC = () => {
@@ -23,7 +22,7 @@ export const AISuiteView: React.FC = () => {
   const [chatLog, setChatLog] = useState([
     {
       role: 'ai',
-      text: 'Hello Engineer! I am NexusBot AI. Ask me for Bill of Quantities (BOQ) estimation, concrete mix designs (IS 456), or labor sizing.',
+      text: 'BuildNexus Intelligence ready. Ask for IS 456 Bill of Quantities, mix design calculations, or labor sizing.',
     },
     {
       role: 'user',
@@ -31,13 +30,13 @@ export const AISuiteView: React.FC = () => {
     },
     {
       role: 'ai',
-      text: `📊 **Automated BOQ Estimation (IS 456 Standards)**:
-• **Concrete Volume**: 14.15 m³ (M20 / M25 Grade)
-• **Cement Required**: ~118 Bags (UltraTech 53 Grade)
-• **TMT Steel Rebar (8mm & 10mm)**: 1.15 Metric Tons
-• **River Sand / M-Sand**: 22 Metric Tons
-• **Recommended Crew**: 1 Bar-Bending Gang (8 men for 2 days) + 1 Pouring Gang (12 men on pour day).
-• **Estimated Raw Material Cost**: ₹1,84,500 (Direct Yard Rate via BuildNexus).`,
+      text: `📊 Automated BOQ Estimation (IS 456 Standards):
+• Concrete Volume: 14.15 m³ (M25 Grade)
+• Cement Required: ~118 Bags (UltraTech 53 Grade)
+• TMT Steel Rebar (8mm & 10mm): 1.15 Metric Tons
+• River Sand / M-Sand: 22 Metric Tons
+• Recommended Crew: 1 Bar-Bending Gang (8 men) + 1 Pouring Gang (12 men on pour day).
+• Estimated Direct Procurement Cost: ₹1,84,500 (14.8% below street rates).`,
     },
   ]);
   const [chatInput, setChatInput] = useState('');
@@ -55,7 +54,7 @@ export const AISuiteView: React.FC = () => {
     status: 'READY',
     trade: 'Master Masonry (English Bond)',
     sparcSmoothness: '0.94 / 1.0 (High Rhythm)',
-    postureErgonomics: 'Low Strain (REBA Score: 2)',
+    postureErgonomics: 'Low Strain (REBA: 2)',
     plumbVariance: '± 1.2 mm (Architectural Grade)',
     certifiedGrade: 'Grade A+ (Verified Skilled)',
   });
@@ -71,7 +70,7 @@ export const AISuiteView: React.FC = () => {
         ...prev,
         {
           role: 'ai',
-          text: `NexusBot Intelligence response: Analyzing your query "${userMsg}". Current local market parameters show favorable spot rates for procurement within a 6km radius.`,
+          text: `Intelligence Analysis for "${userMsg}": Regional batch availability within a 6km radius is currently optimal. Procuring directly through BuildNexus locks in an estimated 14% cost efficiency.`,
         },
       ]);
     }, 1000);
@@ -88,7 +87,6 @@ export const AISuiteView: React.FC = () => {
         materialNode: 'Lakshmi Building Supplies (Yeshwanthpur • 4.2 km)',
         syncWindow: 'Today 11:30 AM — 01:00 PM',
         expectedIdleSavings: '₹4,800 saved in eliminated wait-hours',
-        jointLoss: '0.032 (Converged)',
       });
     }, 1500);
   };
@@ -101,7 +99,7 @@ export const AISuiteView: React.FC = () => {
         status: 'VERIFIED',
         trade: 'TMT Steel Bar-Bending & Column Cage Tying',
         sparcSmoothness: '0.92 / 1.0 (Fluid Keypoints)',
-        postureErgonomics: 'Moderate (REBA Score: 3)',
+        postureErgonomics: 'Moderate (REBA: 3)',
         plumbVariance: '± 0.8 mm (High Rigidity)',
         certifiedGrade: 'Grade A (Master Craftsman)',
       });
@@ -109,84 +107,77 @@ export const AISuiteView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 rounded-2xl p-6 sm:p-8 text-white border border-indigo-900/80 shadow-2xl relative overflow-hidden">
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold mb-3 border border-indigo-500/30">
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            <span>Proprietary Artificial Intelligence Architecture</span>
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-black font-['Space_Grotesk'] text-white">
-            BuildNexus AI SuperCore Engine
-          </h1>
-          <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Going beyond naive e-commerce matching: deploying <strong>Spatio-Temporal Graph Neural Networks</strong>,{' '}
-            <strong>Deep Kinematic Action Recognition</strong>, and <strong>Multi-Horizon Quantile Price Forecasting</strong>.
-          </p>
-
-          {/* Sub-Tabs */}
-          <div className="mt-5 flex flex-wrap gap-2">
-            {[
-              { id: 'copilot', label: 'NexusBot Copilot', icon: Brain },
-              { id: 'sthgnn', label: 'ST-HGNN Tripartite Matcher', icon: GitBranch },
-              { id: 'vision', label: 'Vision Skill Verifier (ST-GCN)', icon: Video },
-              { id: 'forecaster', label: 'TFT Commodity Forecaster', icon: TrendingUp },
-            ].map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeSubTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveSubTab(tab.id as any)}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition ${
-                    isActive
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
-                      : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 border border-slate-800'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
+    <div className="space-y-10">
+      {/* Title with Apple Intelligence Aura */}
+      <div>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-[#ff5e3a]/10 via-[#ff2a68]/10 to-[#9b51e0]/10 text-xs font-semibold text-[#1d1d1f] mb-2 border border-black/[0.04]">
+          <Sparkles className="w-3.5 h-3.5 text-[#0071e3]" />
+          <span>BuildNexus Intelligence</span>
         </div>
+        <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1d1d1f]">
+          Intelligence. Integrated into every build.
+        </h2>
+        <p className="text-lg text-[#86868b] font-normal mt-1">
+          Deep neural networks tailored for real-world construction logistics and workforce verification.
+        </p>
+      </div>
+
+      {/* Apple Capsule Sub-Pill Controls */}
+      <div className="inline-flex items-center bg-[#e8e8ed]/70 p-1 rounded-full text-xs font-medium overflow-x-auto max-w-full no-scrollbar">
+        {[
+          { id: 'copilot', label: 'NexusBot IS 456 Co-pilot' },
+          { id: 'sthgnn', label: 'ST-HGNN Tripartite Matcher' },
+          { id: 'vision', label: 'Video Proof-of-Skill' },
+          { id: 'forecaster', label: '30-Day Commodity Forecaster' },
+        ].map((tab) => {
+          const isActive = activeSubTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveSubTab(tab.id as any)}
+              className={`px-4 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap ${
+                isActive
+                  ? 'bg-[#1d1d1f] text-white shadow-sm'
+                  : 'text-[#1d1d1f] hover:text-black'
+              }`}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* SUB-MODULE 1: NEXUSBOT COPILOT */}
       {activeSubTab === 'copilot' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+        <div className="rounded-[28px] bg-[#f5f5f7] p-8 space-y-6">
+          <div className="flex items-center justify-between pb-4 border-b border-[#d2d2d7]/50">
             <div>
-              <h2 className="text-lg font-black text-slate-900 font-['Space_Grotesk'] flex items-center gap-2">
-                <Brain className="w-5 h-5 text-indigo-600" />
-                <span>NexusBot: AI Civil Engineering Assistant</span>
-              </h2>
-              <p className="text-xs text-slate-500">
-                Trained on Indian Standards (IS 456, IS 1200) for instant structural quantities, mix proportions, and schedules.
+              <h3 className="text-xl font-semibold tracking-tight text-[#1d1d1f]">
+                NexusBot Co-pilot
+              </h3>
+              <p className="text-xs text-[#86868b]">
+                Trained on Indian Standards (IS 456, IS 1200) for structural quantities and mix design.
               </p>
             </div>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-              Online • LLM Co-Pilot
+            <span className="text-[11px] font-semibold text-[#1b8738] bg-[#eaf6ed] px-3 py-1 rounded-full">
+              Ready
             </span>
           </div>
 
-          {/* Chat Window */}
-          <div className="h-80 overflow-y-auto space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs sm:text-sm">
+          <div className="h-80 overflow-y-auto space-y-3 p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 text-xs sm:text-sm no-scrollbar">
             {chatLog.map((c, i) => (
               <div
                 key={i}
                 className={`flex flex-col ${c.role === 'user' ? 'items-end' : 'items-start'}`}
               >
-                <div className="text-[10px] font-bold text-slate-400 mb-1 px-1">
-                  {c.role === 'user' ? 'Site Contractor' : 'NexusBot AI'}
-                </div>
+                <span className="text-[10px] text-[#86868b] mb-1 px-1">
+                  {c.role === 'user' ? 'Site Engineer' : 'BuildNexus Intelligence'}
+                </span>
                 <div
-                  className={`max-w-[85%] rounded-2xl p-4 shadow-sm whitespace-pre-line leading-relaxed ${
+                  className={`max-w-[85%] rounded-[20px] p-4 whitespace-pre-line leading-relaxed ${
                     c.role === 'user'
-                      ? 'bg-blue-600 text-white rounded-br-none'
-                      : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'
+                      ? 'bg-[#0071e3] text-white rounded-br-sm'
+                      : 'bg-[#f5f5f7] text-[#1d1d1f] rounded-bl-sm'
                   }`}
                 >
                   {c.text}
@@ -195,22 +186,20 @@ export const AISuiteView: React.FC = () => {
             ))}
           </div>
 
-          {/* Input */}
           <div className="flex items-center gap-2">
             <input
               type="text"
-              placeholder="Ask for cement bags for 500 sq.ft brickwork, or beam reinforcement specs..."
+              placeholder="Ask for cement bags for 500 sq.ft brickwork, or mix design specs..."
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendChat()}
-              className="flex-1 px-4 py-2.5 rounded-lg border border-slate-300 text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="flex-1 px-4 py-2.5 rounded-full bg-white border border-[#d2d2d7] text-xs text-[#1d1d1f] focus:outline-none focus:ring-2 focus:ring-[#0071e3]"
             />
             <button
               onClick={handleSendChat}
-              className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-sm transition"
+              className="bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-medium px-5 py-2.5 rounded-full transition shadow-sm"
             >
-              <Send className="w-4 h-4" />
-              <span>Ask AI</span>
+              Ask
             </button>
           </div>
         </div>
@@ -218,42 +207,32 @@ export const AISuiteView: React.FC = () => {
 
       {/* SUB-MODULE 2: ST-HGNN TRIPARTITE MATCHING */}
       {activeSubTab === 'sthgnn' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-            <div>
-              <h2 className="text-lg font-black text-slate-900 font-['Space_Grotesk'] flex items-center gap-2">
-                <GitBranch className="w-5 h-5 text-blue-600" />
-                <span>Spatio-Temporal Heterogeneous Graph Neural Network (ST-HGNN)</span>
-              </h2>
-              <p className="text-xs text-slate-500">
-                Solving the 3-Way Synchronization Puzzle: Site Requirement $\leftrightarrow$ Labor Gang $\leftrightarrow$ Material Supplier.
-              </p>
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">
-              Graph Attention Engine
-            </span>
+        <div className="rounded-[28px] bg-[#f5f5f7] p-8 space-y-6">
+          <div className="pb-4 border-b border-[#d2d2d7]/50">
+            <h3 className="text-xl font-semibold tracking-tight text-[#1d1d1f]">
+              Spatio-Temporal Graph Neural Network
+            </h3>
+            <p className="text-xs text-[#86868b] mt-1">
+              Synchronizing Site Requirements $\leftrightarrow$ Labor Squads $\leftrightarrow$ Material Yards in a unified hypergraph.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Site Node (V_s)
-              </label>
+              <label className="text-[#86868b] font-medium block mb-1">Site Location Node</label>
               <input
                 type="text"
                 value={siteLocation}
                 onChange={(e) => setSiteLocation(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold text-slate-900"
+                className="w-full px-4 py-2 rounded-xl bg-white border border-[#d2d2d7] font-semibold text-[#1d1d1f]"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Labor Requirement (V_l)
-              </label>
+              <label className="text-[#86868b] font-medium block mb-1">Required Labor Trade</label>
               <select
                 value={requiredTrade}
                 onChange={(e) => setRequiredTrade(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+                className="w-full px-4 py-2 rounded-xl bg-white border border-[#d2d2d7] font-semibold text-[#1d1d1f]"
               >
                 <option>Ready-Mix Pourers & Vibrators</option>
                 <option>Master Masonry & Bricklaying</option>
@@ -262,14 +241,12 @@ export const AISuiteView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                Material Ingestion (V_m)
-              </label>
+              <label className="text-[#86868b] font-medium block mb-1">Material Batch Ingestion</label>
               <input
                 type="text"
                 value={requiredVolume}
                 onChange={(e) => setRequiredVolume(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold text-slate-900"
+                className="w-full px-4 py-2 rounded-xl bg-white border border-[#d2d2d7] font-semibold text-[#1d1d1f]"
               />
             </div>
           </div>
@@ -277,39 +254,38 @@ export const AISuiteView: React.FC = () => {
           <button
             onClick={handleRunSTHGNN}
             disabled={isMatching}
-            className="w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 transition"
+            className="w-full py-2.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-medium transition shadow-sm"
           >
-            <Zap className="w-4 h-4 text-amber-300" />
-            <span>{isMatching ? 'Propagating Attention Layers...' : 'Execute ST-HGNN Hyperedge Optimization'}</span>
+            {isMatching ? 'Propagating Attention Layers...' : 'Run ST-HGNN Tripartite Optimization'}
           </button>
 
           {matchResult && (
-            <div className="p-5 rounded-xl bg-slate-900 text-white border border-slate-800 space-y-4 animate-fade-in text-xs">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <span className="font-bold text-emerald-400 text-sm flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" /> Optimal Tripartite Match Computed
+            <div className="p-6 rounded-2xl bg-white border border-[#d2d2d7]/60 space-y-4 animate-fade-in text-xs">
+              <div className="flex items-center justify-between pb-3 border-b border-[#d2d2d7]/40">
+                <span className="font-semibold text-[#1d1d1f] flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-[#1b8738]" /> Optimal Tripartite Match Formed
                 </span>
-                <span className="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-bold">
-                  Compatibility: {matchResult.score}
+                <span className="bg-[#eaf6ed] text-[#1b8738] px-3 py-0.5 rounded-full font-semibold">
+                  Match Score: {matchResult.score}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-300">
-                <div className="p-3 rounded-lg bg-slate-800/60 border border-slate-700">
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">Synced Labor Gang</span>
-                  <span className="text-white font-bold">{matchResult.laborNode}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-[#1d1d1f]">
+                <div>
+                  <span className="text-[11px] text-[#86868b] block">Allocated Labor Squad</span>
+                  <span className="font-semibold">{matchResult.laborNode}</span>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-800/60 border border-slate-700">
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">Synced Supplier Yard</span>
-                  <span className="text-white font-bold">{matchResult.materialNode}</span>
+                <div>
+                  <span className="text-[11px] text-[#86868b] block">Allocated Supplier Yard</span>
+                  <span className="font-semibold">{matchResult.materialNode}</span>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-800/60 border border-slate-700">
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">Synchronized Dispatch Window</span>
-                  <span className="text-amber-400 font-bold">{matchResult.syncWindow}</span>
+                <div>
+                  <span className="text-[11px] text-[#86868b] block">Synchronized Delivery Window</span>
+                  <span className="font-semibold text-[#b64400]">{matchResult.syncWindow}</span>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-800/60 border border-slate-700">
-                  <span className="text-slate-400 block text-[10px] uppercase font-bold">Projected Impact</span>
-                  <span className="text-emerald-400 font-bold">{matchResult.expectedIdleSavings}</span>
+                <div>
+                  <span className="text-[11px] text-[#86868b] block">Efficiency Impact</span>
+                  <span className="font-semibold text-[#1b8738]">{matchResult.expectedIdleSavings}</span>
                 </div>
               </div>
             </div>
@@ -319,165 +295,142 @@ export const AISuiteView: React.FC = () => {
 
       {/* SUB-MODULE 3: VISION SKILL VERIFIER */}
       {activeSubTab === 'vision' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-            <div>
-              <h2 className="text-lg font-black text-slate-900 font-['Space_Grotesk'] flex items-center gap-2">
-                <Video className="w-5 h-5 text-purple-600" />
-                <span>Computer Vision "Proof-of-Skill" Scanner (ST-GCN)</span>
-              </h2>
-              <p className="text-xs text-slate-500">
-                Extracting skeletal joint kinematics & SPARC smoothness metrics from 10-second smartphone clips.
-              </p>
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">
-              Pose Kinematics Core
-            </span>
+        <div className="rounded-[28px] bg-[#f5f5f7] p-8 space-y-6">
+          <div className="pb-4 border-b border-[#d2d2d7]/50">
+            <h3 className="text-xl font-semibold tracking-tight text-[#1d1d1f]">
+              Computer Vision "Proof-of-Skill" Scanner
+            </h3>
+            <p className="text-xs text-[#86868b] mt-1">
+              Extracts 33 skeletal joint trajectories and SPARC fluidity metrics from 10-second smartphone clips.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Visualizer Frame */}
-            <div className="h-64 rounded-xl bg-slate-950 border border-slate-800 relative flex flex-col items-center justify-center p-4 text-center overflow-hidden">
-              <div className="w-16 h-16 rounded-full bg-purple-900/50 text-purple-400 flex items-center justify-center mb-3 border border-purple-500/30">
-                <Activity className="w-8 h-8 animate-pulse" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="h-64 rounded-2xl bg-white border border-[#d2d2d7]/60 flex flex-col items-center justify-center p-6 text-center">
+              <Activity className="w-10 h-10 text-[#0071e3] mb-3 animate-pulse" />
+              <div className="text-sm font-semibold text-[#1d1d1f]">
+                {analyzingVideo ? 'Computing Kinematic Matrix...' : 'Skeletal Kinematic Analyzer'}
               </div>
-              <div className="text-xs text-slate-300 font-bold">
-                {analyzingVideo ? 'Tracking 33 Skeletal Keypoints...' : 'Skeletal Kinematic Pose Stream'}
-              </div>
-              <p className="text-[11px] text-slate-500 mt-1 max-w-xs">
-                YOLOv11-Pose extracts joint angular velocity, plumb-line alignment, and tool holding curvature.
+              <p className="text-xs text-[#86868b] mt-1 max-w-xs">
+                YOLOv11-Pose measures wrist angular velocity, postural strain, and tool plumbness.
               </p>
-
               <button
                 onClick={handleSimulateVideoScan}
                 disabled={analyzingVideo}
-                className="mt-4 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md transition"
+                className="mt-5 px-5 py-2 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-medium transition shadow-sm"
               >
-                {analyzingVideo ? 'Processing Kinematic Matrix...' : 'Simulate Video Upload & Audit'}
+                {analyzingVideo ? 'Analyzing...' : 'Simulate Video Verification'}
               </button>
             </div>
 
-            {/* Audit Results Card */}
-            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-3 text-xs">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                <span className="font-extrabold text-slate-800 uppercase tracking-wider text-[11px]">
-                  Worker Verification Report
-                </span>
-                <span className="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold text-[10px]">
+            <div className="bg-white rounded-2xl p-6 border border-[#d2d2d7]/60 space-y-3 text-xs">
+              <div className="flex items-center justify-between pb-3 border-b border-[#d2d2d7]/40">
+                <span className="font-semibold text-[#1d1d1f]">Biomechanical Audit</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-[#eaf6ed] text-[#1b8738] font-semibold">
                   {visionReport.certifiedGrade}
                 </span>
               </div>
 
-              <div className="space-y-2 text-slate-700">
+              <div className="space-y-2 text-[#1d1d1f]">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Classified Trade:</span>
-                  <span className="font-bold text-slate-900">{visionReport.trade}</span>
+                  <span className="text-[#86868b]">Trade Classification:</span>
+                  <span className="font-semibold">{visionReport.trade}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">SPARC Smoothness Metric:</span>
-                  <span className="font-bold text-blue-600">{visionReport.sparcSmoothness}</span>
+                  <span className="text-[#86868b]">SPARC Smoothness Metric:</span>
+                  <span className="font-semibold text-[#0071e3]">{visionReport.sparcSmoothness}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Ergonomic Safety Strain:</span>
-                  <span className="font-bold text-emerald-600">{visionReport.postureErgonomics}</span>
+                  <span className="text-[#86868b]">Ergonomic Strain Index:</span>
+                  <span className="font-semibold text-[#1b8738]">{visionReport.postureErgonomics}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Plumb / Dimensional Variance:</span>
-                  <span className="font-bold text-slate-900">{visionReport.plumbVariance}</span>
+                  <span className="text-[#86868b]">Dimensional Plumb Variance:</span>
+                  <span className="font-semibold">{visionReport.plumbVariance}</span>
                 </div>
               </div>
 
-              <div className="p-3 bg-emerald-100/70 border border-emerald-300 rounded-lg text-emerald-900 text-[11px] font-semibold flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-700 flex-shrink-0" />
-                <span>Verified: Replaces subjective references with tamper-proof mathematical certification.</span>
+              <div className="pt-2 text-[11px] text-[#86868b] border-t border-[#d2d2d7]/40 flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#1b8738]" />
+                <span>Replaces text resumes with verifiable computer vision credentials.</span>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* SUB-MODULE 4: TFT PRICE FORECASTER */}
+      {/* SUB-MODULE 4: TFT COMMODITY FORECASTER */}
       {activeSubTab === 'forecaster' && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-            <div>
-              <h2 className="text-lg font-black text-slate-900 font-['Space_Grotesk'] flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-amber-600" />
-                <span>Temporal Fusion Transformer (TFT) Price Forecaster</span>
-              </h2>
-              <p className="text-xs text-slate-500">
-                Multi-Horizon Probabilistic Quantile Forecasting ($P_{10}, P_{50}, P_{90}$) based on weather, freight, and commodity futures.
-              </p>
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
-              Quantile Transformer
-            </span>
+        <div className="rounded-[28px] bg-[#f5f5f7] p-8 space-y-6">
+          <div className="pb-4 border-b border-[#d2d2d7]/50">
+            <h3 className="text-xl font-semibold tracking-tight text-[#1d1d1f]">
+              Temporal Fusion Transformer Price Forecaster
+            </h3>
+            <p className="text-xs text-[#86868b] mt-1">
+              Multi-horizon quantile forecasting ($P_{10}, P_{50}, P_{90}$) factoring in weather, freight, and commodity futures.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Cement Card */}
-            <div className="p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-3 text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-2xl p-6 border border-[#d2d2d7]/60 space-y-3 text-xs">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-extrabold text-sm text-slate-900">UltraTech 53 Grade (50kg)</h3>
-                  <span className="text-[11px] text-slate-500">Current Spot Rate: <strong>₹365/bag</strong></span>
+                  <h4 className="font-semibold text-sm text-[#1d1d1f]">UltraTech 53 Grade (50kg)</h4>
+                  <span className="text-xs text-[#86868b]">Spot Rate: <strong>₹365/bag</strong></span>
                 </div>
-                <span className="text-rose-600 font-bold bg-rose-100 px-2 py-0.5 rounded">
-                  ▲ Upward Trend Expected
+                <span className="text-[#b64400] font-semibold bg-[#ffefe6] px-2.5 py-0.5 rounded-full">
+                  ▲ Upward Trend
                 </span>
               </div>
 
-              {/* Forecast Simulation Bars */}
-              <div className="space-y-1.5 pt-2">
-                <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-600">7-Day P50 Median:</span>
-                  <span className="font-bold text-slate-800">₹372 (+₹7)</span>
+              <div className="space-y-1.5 pt-3 border-t border-[#d2d2d7]/40 text-[#1d1d1f]">
+                <div className="flex justify-between">
+                  <span className="text-[#86868b]">7-Day P50 Median:</span>
+                  <span className="font-semibold">₹372 (+₹7)</span>
                 </div>
-                <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-600">14-Day P90 Worst Case:</span>
-                  <span className="font-bold text-rose-600">₹380 (+₹15)</span>
+                <div className="flex justify-between">
+                  <span className="text-[#86868b]">14-Day P90 Worst Case:</span>
+                  <span className="font-semibold text-[#b64400]">₹380 (+₹15)</span>
                 </div>
-                <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-600">Driver Reason:</span>
-                  <span className="font-medium text-slate-700">Monsoon freight diesel surcharge (+4%)</span>
+                <div className="flex justify-between">
+                  <span className="text-[#86868b]">Primary Driver:</span>
+                  <span className="text-xs">Monsoon freight diesel surcharge (+4%)</span>
                 </div>
               </div>
 
-              <div className="p-2.5 bg-blue-50 border border-blue-200 rounded text-blue-900 font-bold text-[11px]">
-                💡 AI Recommendation: Procure your 500-bag batch within 48 hours to save ~₹3,500.
+              <div className="p-3 bg-[#f5f5f7] rounded-xl text-xs text-[#0071e3] font-medium">
+                Recommendation: Procure within 48 hours to save approx ₹3,500 on 500 bags.
               </div>
             </div>
 
-            {/* Steel Card */}
-            <div className="p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-3 text-xs">
+            <div className="bg-white rounded-2xl p-6 border border-[#d2d2d7]/60 space-y-3 text-xs">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-extrabold text-sm text-slate-900">Tata Tiscon 550D Rebar (Ton)</h3>
-                  <span className="text-[11px] text-slate-500">Current Spot Rate: <strong>₹62,400/ton</strong></span>
+                  <h4 className="font-semibold text-sm text-[#1d1d1f]">Tata Tiscon 550D Rebar (Ton)</h4>
+                  <span className="text-xs text-[#86868b]">Spot Rate: <strong>₹62,400/ton</strong></span>
                 </div>
-                <span className="text-emerald-700 font-bold bg-emerald-100 px-2 py-0.5 rounded">
-                  ▼ Stable / Softening
+                <span className="text-[#1b8738] font-semibold bg-[#eaf6ed] px-2.5 py-0.5 rounded-full">
+                  ▼ Softening
                 </span>
               </div>
 
-              {/* Forecast Simulation Bars */}
-              <div className="space-y-1.5 pt-2">
-                <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-600">7-Day P50 Median:</span>
-                  <span className="font-bold text-slate-800">₹62,100 (-₹300)</span>
+              <div className="space-y-1.5 pt-3 border-t border-[#d2d2d7]/40 text-[#1d1d1f]">
+                <div className="flex justify-between">
+                  <span className="text-[#86868b]">7-Day P50 Median:</span>
+                  <span className="font-semibold">₹62,100 (-₹300)</span>
                 </div>
-                <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-600">14-Day P10 Best Case:</span>
-                  <span className="font-bold text-emerald-700">₹61,500 (-₹900)</span>
+                <div className="flex justify-between">
+                  <span className="text-[#86868b]">14-Day P10 Best Case:</span>
+                  <span className="font-semibold text-[#1b8738]">₹61,500 (-₹900)</span>
                 </div>
-                <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-600">Driver Reason:</span>
-                  <span className="font-medium text-slate-700">Domestic iron ore supply surplus</span>
+                <div className="flex justify-between">
+                  <span className="text-[#86868b]">Primary Driver:</span>
+                  <span className="text-xs">Domestic iron ore supply surplus</span>
                 </div>
               </div>
 
-              <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded text-emerald-900 font-bold text-[11px]">
-                💡 AI Recommendation: Delay bulk steel procurement until next Tuesday to capture price drop.
+              <div className="p-3 bg-[#f5f5f7] rounded-xl text-xs text-[#1b8738] font-medium">
+                Recommendation: Delay bulk steel procurement until Tuesday to capture price softening.
               </div>
             </div>
           </div>

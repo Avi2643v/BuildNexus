@@ -3,17 +3,17 @@
 import React from 'react';
 import { formatINR } from '@/lib/utils';
 import {
-  HardHat,
-  Users,
-  ShoppingCart,
-  AlertTriangle,
-  Clock,
-  CheckCircle2,
-  TrendingUp,
-  Brain,
+  Sparkles,
   ShieldCheck,
   ChevronRight,
+  TrendingDown,
+  Clock,
+  CheckCircle2,
+  Users,
+  ShoppingBag,
+  ArrowRight,
   Truck,
+  Brain,
 } from 'lucide-react';
 
 interface DashboardViewProps {
@@ -22,316 +22,191 @@ interface DashboardViewProps {
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ onTabChange }) => {
   return (
-    <div className="space-y-6">
-      {/* Hero Welcome Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 p-6 sm:p-8 text-white border border-slate-800 shadow-xl">
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold mb-3 border border-blue-500/30">
-            <span>✨ AI-Synchronized Construction OS</span>
-            <span>•</span>
-            <span>Zero Brokerage Markups</span>
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight font-['Space_Grotesk'] text-white">
-            Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-amber-300">BuildNexus Hub</span>
-          </h1>
-          <p className="mt-2 text-sm sm:text-base text-slate-300 leading-relaxed">
-            Eliminating construction cost leakage through real-time tripartite orchestration:
-            connecting <span className="text-white font-semibold">Contractors</span>,{' '}
-            <span className="text-amber-300 font-semibold">Verified Labor Squads</span>, and{' '}
-            <span className="text-blue-300 font-semibold">Material Yards</span> with zero middlemen.
+    <div className="space-y-12">
+      {/* 1. Hero Big Feature Card (Apple Keynote Style) */}
+      <div className="rounded-[32px] bg-[#f5f5f7] p-8 sm:p-14 relative overflow-hidden transition-all duration-300 hover:shadow-appleCard">
+        <div className="max-w-2xl relative z-10">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#b64400] mb-3 block">
+            BuildNexus Operating System
+          </span>
+          <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight text-[#1d1d1f] leading-[1.08]">
+            Pro power for every site.
+          </h2>
+          <p className="mt-4 text-base sm:text-lg text-[#86868b] leading-relaxed font-normal">
+            A unified digital ecosystem synchronizing contractors, skilled labor gangs, and material yards
+            in real time. With zero unnecessary broker markups and 100% guaranteed fair wages.
           </p>
 
-          <div className="mt-5 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-4">
             <button
               onClick={() => onTabChange('marketplace')}
-              className="px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-600/30 flex items-center gap-2 transition"
+              className="bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs sm:text-sm font-medium px-5 py-2.5 rounded-full shadow-sm transition"
             >
-              <ShoppingCart className="w-4 h-4" />
-              Compare Material Prices
-            </button>
-            <button
-              onClick={() => onTabChange('labour')}
-              className="px-4 py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs sm:text-sm font-bold border border-slate-700 flex items-center gap-2 transition"
-            >
-              <Users className="w-4 h-4" />
-              Book Verified Squads (0% Cut)
+              Explore Materials
             </button>
             <button
               onClick={() => onTabChange('ai-suite')}
-              className="px-4 py-2.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-xs sm:text-sm font-bold shadow-md flex items-center gap-2 transition"
+              className="text-[#0071e3] hover:underline text-xs sm:text-sm font-medium flex items-center gap-1 transition"
             >
-              <Brain className="w-4 h-4 text-amber-300" />
-              Launch AI SuperCore
+              <span>Discover AI Intelligence</span>
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* Ambient Glow */}
-        <div className="absolute -top-24 -right-24 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        {/* Subtle Decorative Geometric Silhouette */}
+        <div className="absolute right-4 -bottom-10 opacity-10 pointer-events-none hidden lg:block">
+          <div className="w-96 h-96 rounded-full border-[32px] border-[#1d1d1f]"></div>
+        </div>
       </div>
 
-      {/* KPI Cards Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1 */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Active Sites</span>
-            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-              <HardHat className="w-4 h-4" />
-            </div>
+      {/* 2. Apple Spec Metrics (Clean Minimal Numbers) */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left transition hover:bg-[#ebebee]">
+          <div className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1d1d1f]">
+            100%
           </div>
-          <div className="mt-3">
-            <div className="text-2xl font-black text-slate-900 font-['Space_Grotesk']">6 Active</div>
-            <div className="text-xs text-emerald-600 font-semibold flex items-center gap-1 mt-1">
-              <TrendingUp className="w-3.5 h-3.5" />
-              <span>All 6 within budget parameters</span>
-            </div>
+          <div className="text-xs font-medium text-[#86868b] mt-1">
+            Fair Wage Guarantee. Zero platform deductions from worker earnings.
           </div>
         </div>
 
-        {/* Card 2 */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Verified Workers</span>
-            <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
-              <Users className="w-4 h-4" />
-            </div>
+        <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left transition hover:bg-[#ebebee]">
+          <div className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1d1d1f]">
+            14.8%
           </div>
-          <div className="mt-3">
-            <div className="text-2xl font-black text-slate-900 font-['Space_Grotesk']">36 Present</div>
-            <div className="text-xs text-blue-600 font-semibold flex items-center gap-1 mt-1">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Video Verified (Avg: 92% Skill)</span>
-            </div>
+          <div className="text-xs font-medium text-[#86868b] mt-1">
+            Average cost reduction on wholesale cement and steel procurement.
           </div>
         </div>
 
-        {/* Card 3 */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Fair Wage Guarantee</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4" />
-            </div>
+        <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left transition hover:bg-[#ebebee]">
+          <div className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#1d1d1f]">
+            90 min
           </div>
-          <div className="mt-3">
-            <div className="text-2xl font-black text-emerald-600 font-['Space_Grotesk']">100% Direct</div>
-            <div className="text-xs text-slate-600 font-medium flex items-center gap-1 mt-1">
-              <span>0% Contractor/Platform deduction</span>
-            </div>
+          <div className="text-xs font-medium text-[#86868b] mt-1">
+            Perishable RMC setting horizon tracked live with dynamic MARL rerouting.
           </div>
         </div>
 
-        {/* Card 4 */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Procurement Savings</span>
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-              <TrendingUp className="w-4 h-4" />
-            </div>
+        <div className="bg-[#f5f5f7] rounded-[24px] p-6 text-center sm:text-left transition hover:bg-[#ebebee]">
+          <div className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#0071e3]">
+            94%
           </div>
-          <div className="mt-3">
-            <div className="text-2xl font-black text-indigo-600 font-['Space_Grotesk']">₹42,850</div>
-            <div className="text-xs text-indigo-700 font-semibold flex items-center gap-1 mt-1">
-              <span>14.8% below street broker rates</span>
-            </div>
+          <div className="text-xs font-medium text-[#86868b] mt-1">
+            Computer vision skill accuracy from 10-second worker demonstration videos.
           </div>
         </div>
       </div>
 
-      {/* Real-Time Operational Alerts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Urgent Alert 1: Perishable Concrete Logistics */}
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-5 shadow-sm">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center animate-pulse">
-                <Truck className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-slate-900">Perishable Dispatch: RMC Transit Mixer</h3>
-                <p className="text-xs text-amber-800 font-medium">Batch Age: 44m / 90m Maximum Shelf-Life</p>
-              </div>
+      {/* 3. Bento Grid: Four Apple-Style Feature Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Card 1: Wholesale Materials */}
+        <div className="rounded-[28px] bg-[#f5f5f7] p-8 sm:p-10 flex flex-col justify-between hover:shadow-appleCard transition duration-300">
+          <div>
+            <div className="text-xs font-semibold text-[#86868b] uppercase tracking-wider mb-2">
+              Wholesale Store
             </div>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-200 text-amber-900 uppercase">
-              In Transit (ETA: 18 min)
-            </span>
+            <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+              Transparent pricing. Down to the rupee.
+            </h3>
+            <p className="mt-3 text-sm text-[#86868b] leading-relaxed">
+              Compare live rates across verified local cement, rebar, sand, and brick yards.
+              Eliminating secret broker commissions and fake freight surcharges.
+            </p>
           </div>
-          <p className="mt-3 text-xs text-slate-700 leading-normal">
-            Ready-Mix Concrete batch #BN-ORD-9042 en route to Site 4B. The <strong>MARL Dynamic Dispatch Agent</strong> has synced the 12-man pouring crew to stand by at the pump hopper.
-          </p>
-          <div className="mt-4 flex items-center justify-between pt-3 border-t border-amber-200/80">
-            <span className="text-xs text-slate-600 font-semibold">Delivery OTP: <span className="font-mono bg-white px-2 py-0.5 rounded border border-amber-300 text-slate-900 font-bold">4921</span></span>
-            <button
-              onClick={() => onTabChange('delivery')}
-              className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center gap-1"
-            >
-              Track Live Map <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
 
-        {/* Urgent Alert 2: Stock Depletion Horizon */}
-        <div className="bg-gradient-to-r from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-5 shadow-sm">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-rose-500 text-white flex items-center justify-center">
-                <AlertTriangle className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-slate-900">Stock Depletion: UltraTech 53 Grade</h3>
-                <p className="text-xs text-rose-800 font-medium">Site Inventory: 24 Bags (Depletion in 2.8 Days)</p>
-              </div>
-            </div>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-200 text-rose-900 uppercase">
-              Reorder Warning
-            </span>
-          </div>
-          <p className="mt-3 text-xs text-slate-700 leading-normal">
-            Daily mortar consumption will exhaust on-site cement by Thursday afternoon. The <strong>Price Forecaster</strong> predicts local price rise of +₹8/bag due to fuel hike next week.
-          </p>
-          <div className="mt-4 flex items-center justify-between pt-3 border-t border-rose-200/80">
-            <span className="text-xs text-slate-600">Lock in at: <strong>₹365/bag</strong></span>
+          <div className="mt-8 pt-6 border-t border-[#d2d2d7]/50 flex items-center justify-between">
+            <span className="text-xs text-[#1d1d1f] font-semibold">UltraTech 53 Grade from ₹365</span>
             <button
               onClick={() => onTabChange('marketplace')}
-              className="text-xs font-bold text-rose-900 hover:text-rose-950 flex items-center gap-1"
+              className="text-[#0071e3] hover:underline text-xs font-medium flex items-center gap-1"
             >
-              1-Click Reorder <ChevronRight className="w-3.5 h-3.5" />
+              <span>Shop Materials</span>
+              <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Feature Navigation Cards */}
-      <div>
-        <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-500 mb-3 font-['Space_Grotesk']">
-          Core Platform Workflows
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Item 1 */}
-          <div
-            onClick={() => onTabChange('marketplace')}
-            className="group cursor-pointer bg-white rounded-xl p-5 border border-slate-200 hover:border-blue-400 hover:shadow-md transition"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition">
-                <ShoppingCart className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold uppercase text-slate-400 group-hover:text-blue-600 transition">
-                Explore →
-              </span>
+        {/* Card 2: 100% Fair Wage Labor */}
+        <div className="rounded-[28px] bg-[#f5f5f7] p-8 sm:p-10 flex flex-col justify-between hover:shadow-appleCard transition duration-300">
+          <div>
+            <div className="text-xs font-semibold text-[#1b8738] uppercase tracking-wider mb-2">
+              Ethical Workforce
             </div>
-            <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition">
-              Materials Marketplace
+            <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+              Direct to workers. Zero middleman cut.
             </h3>
-            <p className="mt-1 text-xs text-slate-600 leading-normal">
-              Compare rates side-by-side across vetted local suppliers. Cement, TMT Steel, Sand, and Bricks with transparent pricing.
+            <p className="mt-3 text-sm text-[#86868b] leading-relaxed">
+              Every laborer receives 100% of their promised daily wage via biometric escrow.
+              Sardars get transparent management splits, and work is verified with video AI.
             </p>
           </div>
 
-          {/* Item 2 */}
-          <div
-            onClick={() => onTabChange('labour')}
-            className="group cursor-pointer bg-white rounded-xl p-5 border border-slate-200 hover:border-amber-400 hover:shadow-md transition"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition">
-                <Users className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold uppercase text-slate-400 group-hover:text-amber-600 transition">
-                Explore →
-              </span>
+          <div className="mt-8 pt-6 border-t border-[#d2d2d7]/50 flex items-center justify-between">
+            <span className="text-xs text-[#1d1d1f] font-semibold">36 Verified Squads Ready</span>
+            <button
+              onClick={() => onTabChange('labour')}
+              className="text-[#0071e3] hover:underline text-xs font-medium flex items-center gap-1"
+            >
+              <span>Book Labor Squads</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Card 3: In-App Privacy Negotiation */}
+        <div className="rounded-[28px] bg-[#f5f5f7] p-8 sm:p-10 flex flex-col justify-between hover:shadow-appleCard transition duration-300">
+          <div>
+            <div className="text-xs font-semibold text-[#86868b] uppercase tracking-wider mb-2">
+              Private Deals
             </div>
-            <h3 className="text-base font-bold text-slate-900 group-hover:text-amber-600 transition">
-              100% Fair Wage Labor Squads
+            <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+              Privacy built in. Negotiation locked.
             </h3>
-            <p className="mt-1 text-xs text-slate-600 leading-normal">
-              Direct booking for trade gangs (masons, bar benders). Zero contractor cuts. Video-verified skill index for quality assurance.
+            <p className="mt-3 text-sm text-[#86868b] leading-relaxed">
+              Automatic contact masking stops platform leakage and protects wholesale volume pricing.
+              Agree in chat, lock into a smart escrow contract with 1 click.
             </p>
           </div>
 
-          {/* Item 3 */}
-          <div
-            onClick={() => onTabChange('chat')}
-            className="group cursor-pointer bg-white rounded-xl p-5 border border-slate-200 hover:border-indigo-400 hover:shadow-md transition"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold uppercase text-slate-400 group-hover:text-indigo-600 transition">
-                Explore →
-              </span>
+          <div className="mt-8 pt-6 border-t border-[#d2d2d7]/50 flex items-center justify-between">
+            <span className="text-xs text-[#1d1d1f] font-semibold">Auto-Masking Active</span>
+            <button
+              onClick={() => onTabChange('chat')}
+              className="text-[#0071e3] hover:underline text-xs font-medium flex items-center gap-1"
+            >
+              <span>Open Chat</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Card 4: Built-in Intelligence */}
+        <div className="rounded-[28px] bg-gradient-to-br from-[#f5f5f7] via-[#fbfbfd] to-[#ebebee] p-8 sm:p-10 flex flex-col justify-between border border-black/[0.03] hover:shadow-appleCard transition duration-300">
+          <div>
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#0071e3] uppercase tracking-wider mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#0071e3]" />
+              <span>BuildNexus Intelligence</span>
             </div>
-            <h3 className="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition">
-              In-App Private Negotiation
+            <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#1d1d1f]">
+              Architected for intelligence.
             </h3>
-            <p className="mt-1 text-xs text-slate-600 leading-normal">
-              Auto-masks mobile numbers to eliminate off-platform leakage. Official in-chat offer creation and escrow-ready agreement locks.
+            <p className="mt-3 text-sm text-[#86868b] leading-relaxed">
+              Featuring NexusBot IS 456 Co-pilot, Spatio-Temporal Graph Tripartite Matching,
+              and 30-day commodity price forecasting for cement and steel.
             </p>
           </div>
 
-          {/* Item 4 */}
-          <div
-            onClick={() => onTabChange('khata')}
-            className="group cursor-pointer bg-white rounded-xl p-5 border border-slate-200 hover:border-emerald-400 hover:shadow-md transition"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold uppercase text-slate-400 group-hover:text-emerald-600 transition">
-                Explore →
-              </span>
-            </div>
-            <h3 className="text-base font-bold text-slate-900 group-hover:text-emerald-600 transition">
-              Digital Khata & Ledger
-            </h3>
-            <p className="mt-1 text-xs text-slate-600 leading-normal">
-              Real-time wage ledger, promised vs paid tracking, site petty expenses, and instant PDF/Excel accounting exports.
-            </p>
-          </div>
-
-          {/* Item 5 */}
-          <div
-            onClick={() => onTabChange('delivery')}
-            className="group cursor-pointer bg-white rounded-xl p-5 border border-slate-200 hover:border-sky-400 hover:shadow-md transition"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-9 h-9 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center group-hover:scale-110 transition">
-                <Truck className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold uppercase text-slate-400 group-hover:text-sky-600 transition">
-                Explore →
-              </span>
-            </div>
-            <h3 className="text-base font-bold text-slate-900 group-hover:text-sky-600 transition">
-              Central Warehouse Dispatch
-            </h3>
-            <p className="mt-1 text-xs text-slate-600 leading-normal">
-              Staging hub delivery tracking, driver checklist verification, and secure OTP handshakes for zero-loss drop-offs.
-            </p>
-          </div>
-
-          {/* Item 6 */}
-          <div
-            onClick={() => onTabChange('ai-suite')}
-            className="group cursor-pointer bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5 border-2 border-indigo-300 hover:border-indigo-500 hover:shadow-md transition"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center group-hover:scale-110 transition">
-                <Brain className="w-5 h-5" />
-              </div>
-              <span className="text-[10px] font-bold uppercase text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full border border-indigo-200">
-                Novel Core
-              </span>
-            </div>
-            <h3 className="text-base font-bold text-indigo-950 group-hover:text-indigo-700 transition">
-              AI SuperCore Suite
-            </h3>
-            <p className="mt-1 text-xs text-slate-700 leading-normal">
-              ST-HGNN Tripartite Matcher, Video Skill Verifier (ST-GCN), NexusBot Copilot, and 30-Day Commodity Forecaster.
-            </p>
+          <div className="mt-8 pt-6 border-t border-[#d2d2d7]/50 flex items-center justify-between">
+            <span className="text-xs text-[#0071e3] font-semibold">ST-HGNN + VideoMAE Core</span>
+            <button
+              onClick={() => onTabChange('ai-suite')}
+              className="text-[#0071e3] hover:underline text-xs font-medium flex items-center gap-1"
+            >
+              <span>Explore AI Core</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
       </div>
