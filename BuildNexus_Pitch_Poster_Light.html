@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildNexus - Pitch Poster (Light Theme) | INNOV12</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .clean-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s ease;
+    }
+
+    .clean-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      transform: translateY(-2px);
+    }
+
+    .badge-num {
+      background: #0f172a;
+      color: #ffffff;
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .poster-container {
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8 flex flex-col items-center justify-center">
+
+  <!-- Control Toolbar (Hidden on Print) -->
+  <div class="no-print w-full max-w-7xl flex justify-between items-center mb-4 px-2">
+    <div class="flex items-center gap-2 text-xs sm:text-sm text-slate-600 font-medium">
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+      <span>Light Theme • Presentation & Ink-Friendly Print Ready</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="window.print()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs sm:text-sm rounded-lg shadow-sm flex items-center gap-2 cursor-pointer transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+        Print / Save as PDF
+      </button>
+      <button onclick="document.documentElement.requestFullscreen()" class="px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm rounded-lg border border-slate-300 shadow-sm transition">
+        Full Screen
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN POSTER CANVAS -->
+  <div class="poster-container w-full max-w-7xl rounded-2xl border border-slate-200 shadow-xl bg-white p-6 sm:p-10 relative overflow-hidden">
+    
+    <!-- Subtle Ambient Pastel Backdrops -->
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-amber-100/60 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-sky-100/60 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- POSTER HEADER -->
+    <header class="relative z-10 border-b border-slate-200 pb-6 mb-7 flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <!-- Left: INNOV12 Brand Badge -->
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 p-0.5 shadow-sm flex items-center justify-center">
+          <div class="w-full h-full bg-white rounded-[10px] flex flex-col items-center justify-center p-1">
+            <span class="font-heading text-amber-600 font-extrabold text-[10px] tracking-wider">INNOV</span>
+            <span class="font-heading text-slate-900 font-extrabold text-lg leading-none">12</span>
+          </div>
+        </div>
+        <div>
+          <div class="text-[11px] tracking-widest uppercase font-bold text-amber-600">Student Innovation Challenge</div>
+          <div class="text-sm font-semibold text-slate-700">Imagine • Innovate • Impact</div>
+        </div>
+      </div>
+
+      <!-- Center: Title & Core Motto -->
+      <div class="text-center md:flex-1">
+        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold uppercase tracking-wider mb-2">
+          <span>🏗️ ConTech Digital Platform</span>
+          <span class="text-slate-400">•</span>
+          <span>Web & Mobile OS</span>
+        </div>
+        <h1 class="font-heading text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+          BuildNexus<span class="text-amber-600">Hub</span>
+        </h1>
+        <p class="text-slate-600 text-sm sm:text-base font-medium mt-1">
+          "The Digital Era of Construction — <span class="text-amber-600 font-bold">Build Smarter. Pay Fairly.</span>"
+        </p>
+      </div>
+
+      <!-- Right: Challenge Category -->
+      <div class="text-right hidden md:block">
+        <div class="text-xs uppercase tracking-widest text-slate-500 font-bold">PROJECT PITCH</div>
+        <div class="font-heading text-lg font-bold text-slate-800">FROM IDEA TO IMPACT</div>
+        <div class="text-xs text-slate-500 font-medium">Category: Smart Infrastructure</div>
+      </div>
+    </header>
+
+    <!-- 7-BLOCK CHALLENGE GRID (Light 3-Column Layout) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 relative z-10">
+
+      <!-- LEFT COLUMN (Cols 1-4) -->
+      <div class="lg:col-span-4 flex flex-col gap-4">
+        
+        <!-- 01: Problem Statement -->
+        <div class="clean-card rounded-xl p-5 bg-rose-50/50 border-l-4 border-l-rose-500">
+          <div class="flex items-center gap-2.5 mb-2.5">
+            <span class="badge-num w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center font-heading">01</span>
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-rose-700 font-heading">Problem Statement</h2>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            India's civil construction sector suffers from <strong class="text-rose-700 font-semibold">12–18% cost leakage</strong> caused by opaque 3-tier broker markups, unfair daily wage deductions (<strong class="text-rose-700 font-semibold">20–30%</strong>), transit highway toll disputes, and unmonitored site material stock-outs that halt construction.
+          </p>
+          <div class="mt-3 pt-2.5 border-t border-rose-100 flex items-center justify-between text-xs text-rose-800 font-medium">
+            <span>⚠️ Cost Loss: ₹12–18L per ₹1 Cr project</span>
+            <span>Zero Visibility</span>
+          </div>
+        </div>
+
+        <!-- 02: Proposed Solution -->
+        <div class="clean-card rounded-xl p-5 bg-amber-50/40 border-l-4 border-l-amber-500">
+          <div class="flex items-center gap-2.5 mb-2.5">
+            <span class="badge-num w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center font-heading">02</span>
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-amber-700 font-heading">Proposed Solution</h2>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <strong class="text-slate-900">BuildNexus</strong> is an end-to-end digital ConTech operating system connecting Builders, Suppliers, Trade Squads, and Homeowners. It provides transparent wholesale procurement, sq.ft-based labor contracts, real-time site stock tracking, and OTP-verified delivery.
+          </p>
+          <div class="mt-3 pt-2.5 border-t border-amber-100 flex flex-wrap gap-1.5">
+            <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-semibold border border-amber-200">Direct Procurement</span>
+            <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 text-[10px] font-semibold border border-sky-200">100% Fair Pay</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-semibold border border-emerald-200">Zero Stock-out</span>
+          </div>
+        </div>
+
+        <!-- 04: Competitor Analysis -->
+        <div class="clean-card rounded-xl p-5 bg-sky-50/40 border-l-4 border-l-sky-500">
+          <div class="flex items-center gap-2.5 mb-2.5">
+            <span class="badge-num w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center font-heading">04</span>
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-sky-700 font-heading">Competitor Analysis</h2>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-3">
+            Unlike lead directories that only sell unverified phone contacts, or basic accounting apps, BuildNexus owns the <strong class="text-slate-900 font-semibold">entire transactional lifecycle</strong>.
+          </p>
+          <div class="space-y-1.5 text-xs">
+            <div class="flex justify-between items-center p-2 rounded bg-white border border-slate-200">
+              <span class="text-slate-600 font-medium">IndiaMART / Justdial</span>
+              <span class="text-rose-600 font-semibold">Unverified leads only</span>
+            </div>
+            <div class="flex justify-between items-center p-2 rounded bg-white border border-slate-200">
+              <span class="text-slate-600 font-medium">Khatabook / Ledgers</span>
+              <span class="text-amber-600 font-semibold">No logistics or labor</span>
+            </div>
+            <div class="flex justify-between items-center p-2 rounded bg-amber-50 border border-amber-300">
+              <span class="text-slate-900 font-bold">BuildNexus</span>
+              <span class="text-emerald-700 font-bold">Complete Verified OS</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CENTER COLUMN: CORE MOAT & INNOVATION (Cols 5-8) -->
+      <div class="lg:col-span-4 flex flex-col gap-4">
+
+        <!-- 03: Uniqueness & Innovation (Hero Highlight Card) -->
+        <div class="clean-card rounded-xl p-6 border-2 border-amber-400 bg-gradient-to-b from-white via-amber-50/20 to-white shadow-md relative flex-1 flex flex-col justify-between">
+          
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-md bg-amber-600 text-white font-bold text-xs flex items-center justify-center font-heading">03</span>
+                <h2 class="text-sm uppercase font-extrabold tracking-wider text-slate-900 font-heading">Uniqueness & Innovation</h2>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold uppercase border border-amber-300">Core Moat</span>
+            </div>
+
+            <div class="space-y-3">
+              <div class="p-3.5 rounded-lg bg-white border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-2 text-xs font-bold text-emerald-700 mb-1">
+                  <span>🛡️</span> 100% Guaranteed Fair Wages
+                </div>
+                <p class="text-xs text-slate-600 leading-normal">
+                  Direct worker payouts calculated per sq.ft area with <strong>zero platform deductions</strong> (0% cut on labor wages).
+                </p>
+              </div>
+
+              <div class="p-3.5 rounded-lg bg-white border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-2 text-xs font-bold text-sky-700 mb-1">
+                  <span>🔒</span> In-App Private Negotiation
+                </div>
+                <p class="text-xs text-slate-600 leading-normal">
+                  Auto-masks personal phone numbers in chat to eliminate bypass, ensure safety, and protect bulk wholesale prices.
+                </p>
+              </div>
+
+              <div class="p-3.5 rounded-lg bg-white border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-2 text-xs font-bold text-amber-700 mb-1">
+                  <span>⏳</span> Site Stock Depletion Horizon
+                </div>
+                <p class="text-xs text-slate-600 leading-normal">
+                  Monitors daily consumption and alerts builders with a countdown ("3 Days of Cement Left") for 1-click reordering.
+                </p>
+              </div>
+
+              <div class="p-3.5 rounded-lg bg-white border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-2 text-xs font-bold text-indigo-700 mb-1">
+                  <span>🤖</span> NexusBot AI Construction Copilot
+                </div>
+                <p class="text-xs text-slate-600 leading-normal">
+                  Estimates Bill of Quantities (BOQ) instantly from sq.ft area and forecasts 30-day commodity price trends (Cement & Steel).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-200 text-center">
+            <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Social Impact + Enterprise ConTech</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN (Cols 9-12) -->
+      <div class="lg:col-span-4 flex flex-col gap-4">
+        
+        <!-- 05: Target Users & Market Potential -->
+        <div class="clean-card rounded-xl p-5 bg-emerald-50/40 border-l-4 border-l-emerald-500">
+          <div class="flex items-center gap-2.5 mb-2.5">
+            <span class="badge-num w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center font-heading">05</span>
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-emerald-800 font-heading">Target Users & Market Potential</h2>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-3">
+            Targeting licensed builders, wholesale material stockists, specialized trade squads/sardars, and residential clients.
+          </p>
+          <div class="grid grid-cols-2 gap-2 text-center">
+            <div class="p-2.5 rounded-lg bg-white border border-slate-200">
+              <div class="font-heading font-bold text-emerald-700 text-base">$700B+</div>
+              <div class="text-[11px] text-slate-500 font-medium">Indian Construction</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-white border border-slate-200">
+              <div class="font-heading font-bold text-amber-600 text-base">₹50+ Cr</div>
+              <div class="text-[11px] text-slate-500 font-medium">Regional Corridor TAM</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 06: Proposed Budget & Requirements -->
+        <div class="clean-card rounded-xl p-5 bg-indigo-50/40 border-l-4 border-l-indigo-500">
+          <div class="flex items-center gap-2.5 mb-2.5">
+            <span class="badge-num w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center font-heading">06</span>
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-indigo-800 font-heading">Budget & Requirements</h2>
+          </div>
+          <div class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-2.5">
+            <strong class="text-slate-900">Prototype Budget:</strong> ₹30,000 – ₹45,000 for cloud staging, database hosting, domain/SSL, and SMS/OTP verification gateway.
+          </div>
+          <div class="text-xs text-slate-600 border-t border-indigo-100 pt-2">
+            <strong class="text-slate-800">Stack:</strong> Next.js 14, TypeScript, Prisma ORM, SQLite, Web Speech API, Tailwind CSS, jsPDF.
+          </div>
+        </div>
+
+        <!-- 07: Business Model & Future Scope -->
+        <div class="clean-card rounded-xl p-5 bg-orange-50/40 border-l-4 border-l-orange-500">
+          <div class="flex items-center gap-2.5 mb-2.5">
+            <span class="badge-num w-6 h-6 rounded-md font-bold text-xs flex items-center justify-center font-heading">07</span>
+            <h2 class="text-xs uppercase font-extrabold tracking-wider text-orange-800 font-heading">Business Model & Future Scope</h2>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-2">
+            <strong class="text-slate-900">Monetization:</strong> 1.5–3% platform fee on bulk material transactions, warehouse staging fees, supplier catalog boosts, and premium contractor SaaS.
+          </p>
+          <p class="text-xs text-slate-600 border-t border-orange-100 pt-2">
+            <strong class="text-slate-800">Future Scope:</strong> Live GPS fleet telematics, automated GST e-way bills, escrow hooks, and pan-India corridor scaling.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- BOTTOM KEY IMPACT METRICS BAR -->
+    <footer class="mt-7 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4 relative z-10">
+      <div class="flex items-center gap-6 sm:gap-10">
+        <div>
+          <div class="font-heading font-black text-2xl text-emerald-600">100%</div>
+          <div class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">Fair Wage Direct</div>
+        </div>
+        <div class="w-px h-8 bg-slate-200"></div>
+        <div>
+          <div class="font-heading font-black text-2xl text-amber-600">12–18%</div>
+          <div class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">Leakage Prevented</div>
+        </div>
+        <div class="w-px h-8 bg-slate-200 hidden sm:block"></div>
+        <div class="hidden sm:block">
+          <div class="font-heading font-black text-2xl text-sky-600">5 Portals</div>
+          <div class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">Unified Ecosystem</div>
+        </div>
+        <div class="w-px h-8 bg-slate-200 hidden md:block"></div>
+        <div class="hidden md:block">
+          <div class="font-heading font-black text-2xl text-indigo-600">0% Cut</div>
+          <div class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">On Worker Wages</div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="text-right">
+          <div class="text-xs font-bold text-slate-800">BuildNexus ConTech Team</div>
+          <div class="text-[11px] text-slate-500 font-mono">github.com/aihikbasu/BuildNexus</div>
+        </div>
+        <div class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-heading text-xs font-bold shadow-sm">
+          INNOV12 PITCH
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html>
