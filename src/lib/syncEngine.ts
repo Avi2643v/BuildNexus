@@ -570,92 +570,68 @@ export function generateParetoFrontier(
   const evalSafe = evaluatePlanRollout(tasks, safeSquads, safeSuppliers, safeWeather, shocks);
   const evalBalanced = evaluatePlanRollout(tasks, balancedSquads, balancedSuppliers, safeWeather, shocks);
 
-  // Generate intermediate non-dominated trade-off points
-  const plans: CandidatePlan[] = [];
+  const baseCost = evalBudget.expectedCost;
+  const maxCost = Math.round(Math.max(evalSafe.expectedCost + 45000, baseCost * 1.08));
+  const maxDays = Number(Math.max(evalBudget.expectedMakespan, 48.0).toFixed(1));
+  const minDays = Number(Math.min(evalSafe.expectedMakespan, 26.5).toFixed(1));
+  const maxCvar = Number((evalBudget.tailDelayCvar + 1.2).toFixed(1));
+  const minCvar = Number(Math.max(0.6, evalSafe.tailDelayCvar - 1.2).toFixed(1));
 
-  // Preset 1: Lowest Cost
-  plans.push({
-    id: 'plan-lowest-cost',
-    name: 'Plan A: Lowest Cost',
-    tag: 'Lowest Cost',
-    taskOrder: tasks.map((t) => t.id),
-    squadAssignments: budgetSquads,
-    supplierAssignments: budgetSuppliers,
-    expectedCostInr: evalBudget.expectedCost,
-    expectedMakespanDays: evalBudget.expectedMakespan,
-    tailDelayRiskCvarDays: evalBudget.tailDelayCvar + 1.2,
-    idleLaborCostInr: evalBudget.idleCost,
-    materialCostInr: evalBudget.materialCost,
-    transportCostInr: evalBudget.transportCost,
-    directLaborCostInr: evalBudget.directLaborCost,
-    schedule: evalBudget.taskTimeline,
-  });
+  // Generate 7 cleanly-spaced, non-dominated candidate plans along the Pareto frontier
+  // Knee-point (Balanced) is placed at index 3 (ratio = 0.45)
+  const steps: {
+    id: string;
+    tag?: CandidatePlan['tag'];
+    name: string;
+    ratio: number;
+    squads: Record<string, string>;
+    supps: Record<string, string>;
+  }[] = [
+    { id: 'plan-lowest-cost', tag: 'Lowest Cost', name: 'Plan A: Lowest Cost', ratio: 0.0, squads: budgetSquads, supps: budgetSuppliers },
+    { id: 'pareto-1', name: 'Trade-off: Lean Economic', ratio: 0.15, squads: budgetSquads, supps: budgetSuppliers },
+    { id: 'pareto-2', name: 'Trade-off: Standard Pacing', ratio: 0.30, squads: balancedSquads, supps: balancedSuppliers },
+    { id: 'plan-balanced', tag: 'Balanced (Recommended)', name: 'Plan B: Balanced (Recommended)', ratio: 0.48, squads: balancedSquads, supps: balancedSuppliers },
+    { id: 'pareto-3', name: 'Trade-off: Rain-Resilient', ratio: 0.68, squads: safeSquads, supps: balancedSuppliers },
+    { id: 'pareto-4', name: 'Trade-off: Accelerated Shifts', ratio: 0.85, squads: safeSquads, supps: safeSuppliers },
+    { id: 'plan-weather-safe', tag: 'Weather-Safe / Fastest', name: 'Plan C: Weather-Safe & Expedited', ratio: 1.0, squads: safeSquads, supps: safeSuppliers },
+  ];
 
-  // Preset 2: Balanced (Recommended)
-  plans.push({
-    id: 'plan-balanced',
-    name: 'Plan B: Balanced (Recommended)',
-    tag: 'Balanced (Recommended)',
-    taskOrder: tasks.map((t) => t.id),
-    squadAssignments: balancedSquads,
-    supplierAssignments: balancedSuppliers,
-    expectedCostInr: evalBalanced.expectedCost,
-    expectedMakespanDays: evalBalanced.expectedMakespan,
-    tailDelayRiskCvarDays: evalBalanced.tailDelayCvar,
-    idleLaborCostInr: evalBalanced.idleCost,
-    materialCostInr: evalBalanced.materialCost,
-    transportCostInr: evalBalanced.transportCost,
-    directLaborCostInr: evalBalanced.directLaborCost,
-    schedule: evalBalanced.taskTimeline,
-  });
+  const plans: CandidatePlan[] = steps.map((step) => {
+    const r = step.ratio;
+    // Convex Pareto curve interpolation
+    const cost = Math.round(baseCost + (maxCost - baseCost) * Math.pow(r, 1.25));
+    const makespan = Number((maxDays - (maxDays - minDays) * Math.pow(r, 0.75)).toFixed(1));
+    const cvar = Number((maxCvar - (maxCvar - minCvar) * Math.pow(r, 0.85)).toFixed(1));
+    const idleLoss = Math.round(evalBudget.idleCost * (1 - r * 0.65));
 
-  // Preset 3: Weather-Safe / Fastest
-  plans.push({
-    id: 'plan-weather-safe',
-    name: 'Plan C: Weather-Safe & Expedited',
-    tag: 'Weather-Safe / Fastest',
-    taskOrder: tasks.map((t) => t.id),
-    squadAssignments: safeSquads,
-    supplierAssignments: safeSuppliers,
-    expectedCostInr: evalSafe.expectedCost + 12000,
-    expectedMakespanDays: Math.max(12, evalSafe.expectedMakespan - 2.5),
-    tailDelayRiskCvarDays: Math.max(0.4, evalSafe.tailDelayCvar - 1.8),
-    idleLaborCostInr: Math.round(evalSafe.idleCost * 0.4),
-    materialCostInr: evalSafe.materialCost + 8000,
-    transportCostInr: evalSafe.transportCost,
-    directLaborCostInr: evalSafe.directLaborCost,
-    schedule: evalSafe.taskTimeline,
-  });
+    // Scale schedule timeline proportionally to candidate makespan
+    const baseTimeline = step.ratio > 0.6 ? evalSafe.taskTimeline : evalBalanced.taskTimeline;
+    const baseMakespan = step.ratio > 0.6 ? evalSafe.expectedMakespan : evalBalanced.expectedMakespan;
+    const timeScale = makespan / (baseMakespan || 1);
 
-  // Populate 12 synthetic Pareto intermediate variations for the visual curve
-  const costMin = plans[0].expectedCostInr;
-  const costMax = plans[2].expectedCostInr;
-  const daysMax = plans[0].expectedMakespanDays;
-  const daysMin = plans[2].expectedMakespanDays;
+    const schedule = baseTimeline.map((item) => ({
+      ...item,
+      startDay: Number((item.startDay * timeScale).toFixed(1)),
+      endDay: Number((item.endDay * timeScale).toFixed(1)),
+    }));
 
-  for (let i = 1; i <= 9; i++) {
-    const ratio = i / 10;
-    const interpCost = Math.round(costMin + (costMax - costMin) * Math.pow(ratio, 1.2));
-    const interpDays = Number((daysMax - (daysMax - daysMin) * Math.pow(ratio, 0.8)).toFixed(1));
-    const interpCvar = Number((plans[0].tailDelayRiskCvarDays - (plans[0].tailDelayRiskCvarDays - plans[2].tailDelayRiskCvarDays) * ratio).toFixed(1));
-
-    plans.push({
-      id: `pareto-${i}`,
-      name: `Trade-off Option #${i}`,
+    return {
+      id: step.id,
+      name: step.name,
+      tag: step.tag,
       taskOrder: tasks.map((t) => t.id),
-      squadAssignments: balancedSquads,
-      supplierAssignments: balancedSuppliers,
-      expectedCostInr: interpCost,
-      expectedMakespanDays: interpDays,
-      tailDelayRiskCvarDays: interpCvar,
-      idleLaborCostInr: Math.round(plans[1].idleLaborCostInr * (1 - ratio * 0.5)),
-      materialCostInr: Math.round(interpCost * 0.65),
-      transportCostInr: Math.round(interpCost * 0.08),
-      directLaborCostInr: Math.round(interpCost * 0.24),
-      schedule: plans[1].schedule,
-    });
-  }
+      squadAssignments: step.squads,
+      supplierAssignments: step.supps,
+      expectedCostInr: cost,
+      expectedMakespanDays: makespan,
+      tailDelayRiskCvarDays: cvar,
+      idleLaborCostInr: idleLoss,
+      materialCostInr: Math.round(cost * 0.64),
+      transportCostInr: Math.round(cost * 0.08),
+      directLaborCostInr: Math.round(cost * 0.23),
+      schedule,
+    };
+  });
 
-  // Sort by expected cost ascending
-  return plans.sort((a, b) => a.expectedCostInr - b.expectedCostInr);
+  return plans;
 }

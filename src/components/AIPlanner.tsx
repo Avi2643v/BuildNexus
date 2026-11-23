@@ -67,18 +67,18 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
 
   const daysExtent = useMemo(() => {
     const days = paretoPlans.map((p) => p.expectedMakespanDays);
-    return [Math.min(...days) - 1, Math.max(...days) + 1.5];
+    return [Math.min(...days) - 1.5, Math.max(...days) + 1.5];
   }, [paretoPlans]);
 
   const getSvgX = (cost: number) => {
     const [min, max] = costExtent;
-    return 40 + ((cost - min) / (max - min || 1)) * 480;
+    return 60 + ((cost - min) / (max - min || 1)) * 450;
   };
 
   const getSvgY = (days: number) => {
     const [min, max] = daysExtent;
-    // Invert Y so shorter days is higher up
-    return 200 - ((days - min) / (max - min || 1)) * 160;
+    // Invert Y so longer makespan is near y=45 (top), shorter makespan is near y=185 (bottom)
+    return 185 - ((days - min) / (max - min || 1)) * 140;
   };
 
   const handleCommit = () => {
@@ -213,16 +213,16 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
               <span className="text-[10px] text-[#86868b]">7 Sequential Tasks</span>
             </div>
             <div className="space-y-1.5 text-[11px] text-[#86868b]">
-              <div className="flex justify-between">
-                <span>1. Excavation $\rightarrow$ 2. PCC Sub-base</span>
+              <div className="flex justify-between items-center">
+                <span>1. Excavation → 2. PCC Sub-base</span>
                 <span className="text-[#0071e3] font-medium">Outdoor (Rain-Sensitive)</span>
               </div>
-              <div className="flex justify-between">
-                <span>3. Rebar Tying $\rightarrow$ 4. Shuttering</span>
+              <div className="flex justify-between items-center">
+                <span>3. Rebar Tying → 4. Shuttering</span>
                 <span className="text-[#1d1d1f] font-medium">Structural (Outdoor)</span>
               </div>
-              <div className="flex justify-between">
-                <span>5. RCC Pouring $\rightarrow$ 6. Brick Masonry</span>
+              <div className="flex justify-between items-center">
+                <span>5. RCC Pouring → 6. Brick Masonry</span>
                 <span className="text-[#b64400] font-medium">JIT Perishable Lock</span>
               </div>
             </div>
@@ -242,7 +242,7 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
                 Pareto Frontier Trade-Off Plot (NSGA-II)
               </h3>
               <p className="text-xs text-[#86868b]">
-                Click any dot to load its synchronized schedule. Dot color indicates Tail Delay Risk (CVaR 90).
+                Click any dot to load its synchronized schedule. Hover smoothly to inspect cost-duration trade-offs.
               </p>
             </div>
 
@@ -261,30 +261,34 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
 
           {/* Custom Interactive SVG Scatter Plot Engine */}
           <div className="relative bg-white rounded-2xl border border-[#d2d2d7]/60 p-4 shadow-sm overflow-hidden">
-            <svg viewBox="0 0 560 240" className="w-full h-64 select-none">
+            <svg
+              viewBox="0 0 560 240"
+              className="w-full h-64 select-none"
+              onMouseLeave={() => setHoveredPlan(null)}
+            >
               {/* Grid Lines */}
-              <line x1="40" y1="20" x2="520" y2="20" stroke="#f0f0f3" strokeWidth="1" />
-              <line x1="40" y1="80" x2="520" y2="80" stroke="#f0f0f3" strokeWidth="1" />
-              <line x1="40" y1="140" x2="520" y2="140" stroke="#f0f0f3" strokeWidth="1" />
-              <line x1="40" y1="200" x2="520" y2="200" stroke="#d2d2d7" strokeWidth="1.5" />
-              <line x1="40" y1="20" x2="40" y2="200" stroke="#d2d2d7" strokeWidth="1.5" />
+              <line x1="60" y1="45" x2="510" y2="45" stroke="#f0f0f3" strokeWidth="1" />
+              <line x1="60" y1="95" x2="510" y2="95" stroke="#f0f0f3" strokeWidth="1" />
+              <line x1="60" y1="145" x2="510" y2="145" stroke="#f0f0f3" strokeWidth="1" />
+              <line x1="60" y1="195" x2="510" y2="195" stroke="#d2d2d7" strokeWidth="1.5" />
+              <line x1="60" y1="35" x2="60" y2="195" stroke="#d2d2d7" strokeWidth="1.5" />
 
               {/* Axis Labels */}
-              <text x="40" y="222" fontSize="9" fill="#86868b" textAnchor="start">
+              <text x="60" y="215" fontSize="9" fill="#86868b" textAnchor="start">
                 Low Cost ({formatINR(costExtent[0])})
               </text>
-              <text x="520" y="222" fontSize="9" fill="#86868b" textAnchor="end">
+              <text x="510" y="215" fontSize="9" fill="#86868b" textAnchor="end">
                 High Cost ({formatINR(costExtent[1])})
               </text>
-              <text x="280" y="235" fontSize="10" fill="#1d1d1f" textAnchor="middle" fontWeight="600">
-                Total Projected Cost ($f_1$ in ₹ INR) →
+              <text x="285" y="232" fontSize="10" fill="#1d1d1f" textAnchor="middle" fontWeight="600">
+                Total Projected Cost (f₁ in ₹ INR) →
               </text>
 
-              <text x="15" y="30" fontSize="9" fill="#86868b" textAnchor="middle">
-                Fast ({daysExtent[0]}d)
+              <text x="28" y="48" fontSize="9" fill="#86868b" textAnchor="middle">
+                Slow ({Math.round(daysExtent[1])}d)
               </text>
-              <text x="15" y="195" fontSize="9" fill="#86868b" textAnchor="middle">
-                Slow ({daysExtent[1]}d)
+              <text x="28" y="195" fontSize="9" fill="#86868b" textAnchor="middle">
+                Fast ({Math.round(daysExtent[0])}d)
               </text>
 
               {/* Connecting Pareto Non-Dominated Curve */}
@@ -292,8 +296,8 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
                 d={paretoPlans.map((p, idx) => `${idx === 0 ? 'M' : 'L'} ${getSvgX(p.expectedCostInr)} ${getSvgY(p.expectedMakespanDays)}`).join(' ')}
                 fill="none"
                 stroke="#0071e3"
-                strokeWidth="2"
-                strokeDasharray="4 3"
+                strokeWidth="2.5"
+                strokeDasharray="4 4"
                 className="opacity-40"
               />
 
@@ -302,6 +306,7 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
                 const cx = getSvgX(plan.expectedCostInr);
                 const cy = getSvgY(plan.expectedMakespanDays);
                 const isSelected = plan.id === activePlan?.id;
+                const isHovered = plan.id === hoveredPlan?.id;
                 const isPreset = !!plan.tag;
 
                 const fillColor = plan.tag === 'Lowest Cost'
@@ -313,11 +318,19 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
                 return (
                   <g
                     key={plan.id}
-                    className="cursor-pointer transition-transform duration-200"
+                    className="cursor-pointer"
                     onClick={() => setSelectedPlanId(plan.id)}
                     onMouseEnter={() => setHoveredPlan(plan)}
-                    onMouseLeave={() => setHoveredPlan(null)}
                   >
+                    {/* Invisible Stable Hit Target - 32px diameter prevents mouse flicker */}
+                    <circle
+                      cx={cx}
+                      cy={cy}
+                      r="16"
+                      fill="transparent"
+                      className="cursor-pointer"
+                    />
+
                     {/* Ring for selected plan */}
                     {isSelected && (
                       <circle
@@ -327,18 +340,20 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
                         fill="none"
                         stroke={fillColor}
                         strokeWidth="2.5"
-                        className="animate-pulse"
+                        strokeOpacity="0.8"
+                        className="animate-pulse pointer-events-none"
                       />
                     )}
 
+                    {/* Visual Point */}
                     <circle
                       cx={cx}
                       cy={cy}
-                      r={isPreset ? 7 : 4.5}
+                      r={isSelected ? 7.5 : isHovered ? 6.5 : (isPreset ? 5.5 : 4)}
                       fill={fillColor}
                       stroke="#ffffff"
-                      strokeWidth={isPreset ? 2 : 1}
-                      className="hover:scale-125 transition-transform"
+                      strokeWidth={isPreset || isSelected ? 2 : 1.5}
+                      className="transition-all duration-150 pointer-events-none"
                     />
 
                     {/* Preset Badges above special points */}
@@ -350,6 +365,7 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
                         fill="#1d1d1f"
                         fontWeight="700"
                         textAnchor="middle"
+                        className="pointer-events-none select-none"
                       >
                         {plan.tag?.split(' ')[0]}
                       </text>
@@ -361,38 +377,58 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
 
             {/* Hover Tooltip Overlay */}
             {hoveredPlan && (
-              <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md p-3 rounded-xl border border-[#d2d2d7] shadow-md text-xs space-y-1 pointer-events-none">
-                <div className="font-semibold text-[#1d1d1f]">{hoveredPlan.name}</div>
-                <div className="text-[#86868b]">
-                  Expected Cost: <strong className="text-[#1d1d1f]">{formatINR(hoveredPlan.expectedCostInr)}</strong>
+              <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-[#d2d2d7] shadow-lg text-xs space-y-1.5 pointer-events-none transition-all duration-200 z-10 min-w-[210px]">
+                <div className="font-semibold text-[#1d1d1f] text-sm flex items-center gap-1.5">
+                  <span
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{
+                      backgroundColor:
+                        hoveredPlan.tag === 'Lowest Cost'
+                          ? '#1b8738'
+                          : hoveredPlan.tag === 'Weather-Safe / Fastest'
+                          ? '#b64400'
+                          : '#0071e3',
+                    }}
+                  />
+                  <span>{hoveredPlan.name}</span>
                 </div>
-                <div className="text-[#86868b]">
-                  Makespan: <strong className="text-[#0071e3]">{hoveredPlan.expectedMakespanDays} Days</strong>
+                <div className="text-[#86868b] flex justify-between gap-4">
+                  <span>Expected Cost:</span>
+                  <strong className="text-[#1d1d1f]">{formatINR(hoveredPlan.expectedCostInr)}</strong>
                 </div>
-                <div className="text-[#86868b]">
-                  Tail Delay Risk (CVaR_90): <strong className="text-[#b64400]">+{hoveredPlan.tailDelayRiskCvarDays} Days</strong>
+                <div className="text-[#86868b] flex justify-between gap-4">
+                  <span>Makespan:</span>
+                  <strong className="text-[#0071e3]">{Number(hoveredPlan.expectedMakespanDays).toFixed(1)} Days</strong>
+                </div>
+                <div className="text-[#86868b] flex justify-between gap-4">
+                  <span>Tail Delay Risk:</span>
+                  <strong className="text-[#b64400]">+{Number(hoveredPlan.tailDelayRiskCvarDays).toFixed(1)} Days</strong>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Selected Plan Metrics Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 text-xs">
-            <div>
-              <span className="text-[#86868b] block text-[11px]">Expected Cost (f1)</span>
-              <span className="text-base font-semibold text-[#1d1d1f]">{formatINR(activePlan.expectedCostInr)}</span>
+          {/* Selected Plan Metrics Strip - Structured to avoid collisions and float explosions */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 p-4 sm:p-5 rounded-2xl bg-white border border-[#d2d2d7]/60 text-xs">
+            <div className="min-w-0">
+              <span className="text-[#86868b] block text-[11px] truncate">Expected Cost (f₁)</span>
+              <span className="text-base font-semibold text-[#1d1d1f] block truncate">{formatINR(activePlan.expectedCostInr)}</span>
+              <span className="text-[10px] text-[#86868b] block truncate mt-0.5">Total project spend</span>
             </div>
-            <div>
-              <span className="text-[#86868b] block text-[11px]">Project Makespan (f2)</span>
-              <span className="text-base font-semibold text-[#0071e3]">{activePlan.expectedMakespanDays} Days</span>
+            <div className="min-w-0">
+              <span className="text-[#86868b] block text-[11px] truncate">Project Makespan (f₂)</span>
+              <span className="text-base font-semibold text-[#0071e3] block truncate">{Number(activePlan.expectedMakespanDays).toFixed(1)} Days</span>
+              <span className="text-[10px] text-[#86868b] block truncate mt-0.5">Open-Meteo integrated</span>
             </div>
-            <div>
-              <span className="text-[#86868b] block text-[11px]">Tail Delay Risk (f3)</span>
-              <span className="text-base font-semibold text-[#b64400]">+{activePlan.tailDelayRiskCvarDays}d CVaR_90</span>
+            <div className="min-w-0">
+              <span className="text-[#86868b] block text-[11px] truncate">Tail Delay Risk (f₃)</span>
+              <span className="text-base font-semibold text-[#b64400] block truncate">+{Number(activePlan.tailDelayRiskCvarDays).toFixed(1)} Days</span>
+              <span className="text-[10px] text-[#86868b] block truncate mt-0.5">CVaR₉₀ worst-10% tail</span>
             </div>
-            <div>
-              <span className="text-[#86868b] block text-[11px]">Idle Loss Minimized</span>
-              <span className="text-base font-semibold text-[#1b8738]">{formatINR(activePlan.idleLaborCostInr)}</span>
+            <div className="min-w-0">
+              <span className="text-[#86868b] block text-[11px] truncate">Idle Loss Minimized</span>
+              <span className="text-base font-semibold text-[#1b8738] block truncate">{formatINR(activePlan.idleLaborCostInr)}</span>
+              <span className="text-[10px] text-[#86868b] block truncate mt-0.5">Coupled mismatch savings</span>
             </div>
           </div>
         </div>
@@ -413,7 +449,7 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
               )}
             </div>
             <p className="text-xs text-[#86868b] mt-1">
-              Gantt timeline integrated hour-by-hour across Open-Meteo weather and supplier lead-times.
+              Gantt timeline integrated hour-by-hour across Open-Meteo weather physics and supplier lead-times.
             </p>
           </div>
 
@@ -427,52 +463,72 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
         </div>
 
         {/* Gantt Timeline View */}
-        <div className="space-y-3">
+        <div className="space-y-4">
           <div className="flex items-center justify-between text-xs text-[#86868b] font-medium px-2">
             <span>Project Tasks (G+4 RCC Framework)</span>
-            <span>Duration Timeline (Days 0 to {Math.ceil(activePlan.expectedMakespanDays)})</span>
+            <div className="flex items-center gap-4 text-[11px]">
+              <span>Day 0</span>
+              <span>•</span>
+              <span>Midpoint (~{Math.round(activePlan.expectedMakespanDays / 2)}d)</span>
+              <span>•</span>
+              <span>Day {Math.ceil(activePlan.expectedMakespanDays)}</span>
+            </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {activePlan.schedule.map((item, idx) => {
               const maxDays = Math.ceil(activePlan.expectedMakespanDays) || 35;
               const leftPct = (item.startDay / maxDays) * 100;
-              const widthPct = Math.max(8, ((item.endDay - item.startDay) / maxDays) * 100);
+              const widthPct = ((item.endDay - item.startDay) / maxDays) * 100;
+              const barColor = item.weatherRiskLevel === 'HIGH'
+                ? 'bg-[#b64400]'
+                : item.weatherRiskLevel === 'MEDIUM'
+                ? 'bg-[#0071e3]'
+                : 'bg-[#1b8738]';
+
+              // Ensure the pill is never squished: min width 76px and fits cleanly on track
+              const clampedLeft = Math.min(80, Math.max(0, leftPct));
+              const effectiveWidth = Math.max(16, Math.min(100 - clampedLeft, widthPct));
 
               return (
                 <div
                   key={idx}
-                  className="p-3.5 rounded-2xl bg-white border border-[#d2d2d7]/60 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs"
+                  className="p-3.5 sm:p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs"
                 >
-                  <div className="min-w-[240px]">
-                    <div className="font-semibold text-[#1d1d1f]">{item.taskName}</div>
-                    <div className="text-[11px] text-[#86868b]">
-                      Squad: <strong className="text-[#1d1d1f]">{item.squadName}</strong> • Supplier: {item.supplierName}
+                  <div className="min-w-[200px] sm:min-w-[240px]">
+                    <div className="font-semibold text-[#1d1d1f] text-sm">{item.taskName}</div>
+                    <div className="text-[11px] text-[#86868b] mt-0.5">
+                      Squad: <strong className="text-[#1d1d1f]">{item.squadName}</strong> • Yard: {item.supplierName}
                     </div>
                   </div>
 
-                  {/* Gantt Bar Strip */}
-                  <div className="flex-1 max-w-md h-7 bg-[#f5f5f7] rounded-full relative overflow-hidden flex items-center">
+                  {/* Gantt Bar Track */}
+                  <div className="flex-1 min-w-[220px] sm:min-w-[320px] h-8 bg-[#f5f5f7] rounded-full relative overflow-hidden flex items-center p-1">
+                    {/* Subtle Milestone Grid */}
+                    <div className="absolute inset-0 flex justify-between px-4 pointer-events-none opacity-20">
+                      <div className="w-px h-full bg-[#86868b]" />
+                      <div className="w-px h-full bg-[#86868b]" />
+                      <div className="w-px h-full bg-[#86868b]" />
+                    </div>
+
+                    {/* Active Gantt Pill */}
                     <div
-                      className={`h-full rounded-full transition-all duration-300 flex items-center justify-end pr-2 text-[10px] font-semibold text-white ${
-                        item.weatherRiskLevel === 'HIGH'
-                          ? 'bg-[#b64400]'
-                          : item.weatherRiskLevel === 'MEDIUM'
-                          ? 'bg-[#0071e3]'
-                          : 'bg-[#1b8738]'
-                      }`}
+                      className={`h-full rounded-full transition-all duration-300 flex items-center justify-center px-3 text-[11px] font-semibold text-white shadow-xs whitespace-nowrap min-w-[76px] ${barColor}`}
                       style={{
-                        marginLeft: `${Math.min(85, leftPct)}%`,
-                        width: `${Math.min(95 - leftPct, widthPct)}%`,
+                        marginLeft: `${clampedLeft}%`,
+                        width: `${effectiveWidth}%`,
                       }}
                     >
-                      Day {item.startDay.toFixed(0)}-{item.endDay.toFixed(0)}
+                      Day {Math.round(item.startDay)}–{Math.round(item.endDay)}
                     </div>
                   </div>
 
-                  <div className="text-right min-w-[120px]">
+                  <div className="flex items-center justify-between md:justify-end gap-3 min-w-[130px]">
+                    <span className="text-[11px] text-[#86868b] font-medium">
+                      {(item.endDay - item.startDay).toFixed(0)}d duration
+                    </span>
                     <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${
                         item.weatherRiskLevel === 'HIGH'
                           ? 'bg-[#ffefe6] text-[#b64400]'
                           : item.weatherRiskLevel === 'MEDIUM'
@@ -480,13 +536,8 @@ export const AIPlanner: React.FC<AIPlannerProps> = ({ onCommitPlan, committedPla
                           : 'bg-[#eaf6ed] text-[#1b8738]'
                       }`}
                     >
-                      {item.weatherRiskLevel} Risk
+                      {item.weatherRiskLevel}
                     </span>
-                    {item.idleDays > 0 && (
-                      <span className="block text-[10px] text-[#b64400] font-medium mt-0.5">
-                        +{item.idleDays}d Idle Wait
-                      </span>
-                    )}
                   </div>
                 </div>
               );

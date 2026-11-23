@@ -213,7 +213,7 @@ export const AISuiteView: React.FC = () => {
               Spatio-Temporal Graph Neural Network
             </h3>
             <p className="text-xs text-[#86868b] mt-1">
-              Synchronizing Site Requirements $\leftrightarrow$ Labor Squads $\leftrightarrow$ Material Yards in a unified hypergraph.
+              Synchronizing Site Requirements ↔ Labor Squads ↔ Material Yards in a unified hypergraph.
             </p>
           </div>
 
@@ -367,7 +367,7 @@ export const AISuiteView: React.FC = () => {
               Temporal Fusion Transformer Price Forecaster
             </h3>
             <p className="text-xs text-[#86868b] mt-1">
-              Multi-horizon quantile forecasting ($P_{10}, P_{50}, P_{90}$) factoring in weather, freight, and commodity futures.
+              Multi-horizon quantile forecasting (P₁₀, P₅₀, P₉₀) factoring in weather, freight, and commodity futures.
             </p>
           </div>
 
